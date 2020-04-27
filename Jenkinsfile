@@ -5,19 +5,8 @@ pipeline {
         stage('Build') {
             steps {
                 container('nodejs') {
-                    sh "node --version"
+                    sh "ls"
                 }
-                sh 'ls'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
             }
         }
     }
