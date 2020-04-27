@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 container('nodejs') {
-                    sh "ls"
+                    sh 'node --version'
                 }
             }
         }
