@@ -1,8 +1,7 @@
-pipeline {
-    agent {
-        kubernetes {
-            label buildLabel
-            yaml """
+podTemplate(
+    label: buildLabel,
+    cloud: cloudLabel,
+    yaml: """
 apiVersion: v1
 kind: Pod
 spec:
@@ -18,8 +17,7 @@ spec:
       image: node:alpine
       imagePullPolicy: Always
 """
-        }
-    }
+) {
     node(buildLabel) {
         container(jnlp) {
             stage('Build') {
