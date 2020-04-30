@@ -1,12 +1,10 @@
 podTemplate(
-    label: buildLabel,
-    cloud: cloudLabel,
     yaml: """
 apiVersion: v1
 kind: Pod
 spec:
     containers:
-    - name jnlp
+    - name: jnlp
       image: jenkins/jnlp-slave:3.27-1
       imagePullPolicy: IfNotPresent
       workingDir: /home/jenkins
@@ -18,7 +16,7 @@ spec:
       imagePullPolicy: Always
 """
 ) {
-    node(buildLabel) {
+    node(POD_LABEL) {
         container(jnlp) {
             stage('Build') {
                 steps {
