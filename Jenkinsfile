@@ -17,20 +17,8 @@ spec:
         secretKeyRef:
             name: git-credentials
             key: password
-  - name: buildah
-    image: quay.io/buildah/stable:v1.14.8
-    envFrom:
-      - configMapRef:
-            name: icr-config
-    env:
-      - name: ICR_APIKEY
-        valueFrom:
-            secretKeyRef:
-              name: default-us-icr-io
-              key: .dockerconfigjson
-
-        
-
+  - image: "quay.io/buildah/stable:v1.14.8"
+    name: "buildah"
 """) {
     node(POD_LABEL) {
         stage('Git Clone') {
@@ -48,10 +36,6 @@ spec:
             git config --global user.name "Jenkins CI"
             git config --global credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f"
             '''
-        }
-        container('buildah') {
-            stage('Build Image') {
-            }
         }
     }
 }
