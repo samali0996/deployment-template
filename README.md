@@ -3,29 +3,47 @@
 Deployment template is a tool that quickly sets up CI/CD integration with your Kubernetes cluster.
 
 ## Prerequisites 
+- Install kubectl cli
 - Provision a Kubernetes cluster
 - Install `helm` cli
 - Create access tokens for git repository and container registry
 
 
 ## Deploy Jenkins onto Cluster
-1. Provision a persistent volume resource and a persistent volume claim resource so that the Jenkins service can have persistent data.
+1. Create a namespace to deploy your Jenkins release to
 ```
-
+kubectl create namespace jenkins
 ```
-
-Using `helm` and the values file in `jeknins/values.yaml`, deploy a Release of the Jenkins chart onto your cluster:
-`helm install jenkins stable/jenkins -f values.yaml`
+2. Provision a persistent volume resource and a persistent volume claim resource so that the Jenkins service can have persistent data.
+```
+kubectl apply -f pv-volume.yaml
+```
+3. Provision the persistent volume claim for Jenkins
+```
+kubectl apply -f pv-claim.yaml 
+```
+4. Using `helm` and the values file in `jeknins/values.yaml`, deploy a release of the Jenkins chart onto your cluster
+```
+helm install jenkins stable/jenkins -f values.yaml --namespace jenkins
+```
+5. Access the Jenkins UI
+```
+. helpers/port-forward.sh 
+```
 
 ## Deploy Kubernetes Dashboard (Optional)
 1. Deploy the Kubernetes dashboard
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
 ```
-
-- k apply -f pv-volume.yaml
-- k apply -f pv-claim.yaml
+2. Deploy the secrets required to access the dashboard
+```
+kubectl apply -f dashboard-adminuser.yaml
+```
+3. Access dashboard
+```
+. helpers/proxy-dashboard.sh
+```
 - add git credentials as secrets
 - add icr credentials as secrets
 - k apply -f jenkins/icr-configmap.yaml  
-- helm install jenkins stable/jenkins -f jenkins/values.yaml
