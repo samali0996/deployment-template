@@ -1,3 +1,28 @@
+# Deployment Template
+
+Deployment template is a tool that quickly sets up CI/CD integration with your Kubernetes cluster.
+
+## Prerequisites 
+- Provision a Kubernetes cluster
+- Install `helm` cli
+- Create access tokens for git repository and container registry
+
+
+## Deploy Jenkins onto Cluster
+1. Provision a persistent volume resource and a persistent volume claim resource so that the Jenkins service can have persistent data.
+```
+
+```
+
+Using `helm` and the values file in `jeknins/values.yaml`, deploy a Release of the Jenkins chart onto your cluster:
+`helm install jenkins stable/jenkins -f values.yaml`
+
+## Deploy Kubernetes Dashboard (Optional)
+1. Deploy the Kubernetes dashboard
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+```
+
 - k apply -f pv-volume.yaml
 - k apply -f pv-claim.yaml
 - add git credentials as secrets
