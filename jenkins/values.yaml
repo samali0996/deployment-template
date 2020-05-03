@@ -1,10 +1,11 @@
-# master:
-#   installPlugins:
-#     - kubernetes:latest
-#     - workflow-job:latest
-#     - workflow-aggregator:latest
-#     - credentials-binding:latest
-#     - git:latest
+master:
+  installPlugins:
+    - kubernetes:latest
+    - kubernetes-credentials-provider:latest
+    - workflow-job:latest
+    - workflow-aggregator:latest
+    - credentials-binding:latest
+    - git:latest
 #   resources:
 #     requests:
 #       cpu: "50m"
