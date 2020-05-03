@@ -1,0 +1,6 @@
+- k apply -f pv-volume.yaml
+- k apply -f pv-claim.yaml
+- add git credentials as secrets
+- add icr credentials as secrets
+- k apply -f jenkins/icr-configmap.yaml  
+- helm install jenkins stable/jenkins -f jenkins/values.yaml
