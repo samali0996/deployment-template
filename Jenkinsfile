@@ -12,12 +12,12 @@ spec:
     - name: GIT_USERNAME
       valueFrom:
         secretKeyRef:
-          name: git-credentials
+          name: jenkins/git-credentials
           key: username
     - name: GIT_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: git-credentials
+          name: jenkins/git-credentials
           key: password
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
@@ -30,19 +30,19 @@ spec:
       mountPath: /home/jenkins
     envFrom:
       - configMapRef:
-          name: cr-config
+          name: jenkins/cr-config
     env:
     - name: HOME
       value: /home/jenkins
     - name: CR_USERNAME
       valueFrom:
         secretKeyRef:
-          name: cr-credentials
+          name: jenkins/cr-credentials
           key: username
     - name: CR_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: cr-credentials
+          name: jenkins/cr-credentials
           key: password
     - name: APP_NAME
       value: deployment-template
