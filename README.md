@@ -31,6 +31,19 @@ helm install jenkins stable/jenkins -f values.yaml --namespace jenkins
 . helpers/port-forward.sh 
 ```
 
+## Set up Secrets and Config
+1. Add Git repo access token
+```
+kubectl apply -f git-credentials.yaml
+```
+2. Add container registry access token
+```
+kubectl apply -f cr-credentials.yaml
+```
+3. Add container registry configuration
+```
+kubectl apply -f cr-configmap.yaml
+```
 ## Deploy Kubernetes Dashboard (Optional)
 1. Deploy the Kubernetes dashboard
 ```
