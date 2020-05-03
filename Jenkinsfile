@@ -1,4 +1,6 @@
 podTemplate(yaml:'''
+metadata:
+  namespace: jenkins
 spec:
   containers:
   - name: jnlp
