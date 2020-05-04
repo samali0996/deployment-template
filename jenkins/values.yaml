@@ -6,6 +6,8 @@ master:
     - workflow-aggregator:latest
     - credentials-binding:latest
     - git:latest
+#agent:
+# envVars:
 #   resources:
 #     requests:
 #       cpu: "50m"

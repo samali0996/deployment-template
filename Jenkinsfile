@@ -1,4 +1,6 @@
 podTemplate(yaml:'''
+metadata:
+  namespace: jenkins
 spec:
   containers:
   - name: jnlp
@@ -30,19 +32,19 @@ spec:
       mountPath: /home/jenkins
     envFrom:
       - configMapRef:
-          name: icr-config
+          name: cr-config
     env:
     - name: HOME
       value: /home/jenkins
-    - name: ICR_USERNAME
+    - name: CR_USERNAME
       valueFrom:
         secretKeyRef:
-          name: icr-credentials
+          name: cr-credentials
           key: username
-    - name: ICR_PASSWORD
+    - name: CR_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: icr-credentials
+          name: cr-credentials
           key: password
     - name: APP_NAME
       value: deployment-template
@@ -84,14 +86,14 @@ spec:
 
                 buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
 
-                if [[ $ICR_USERNAME && $ICR_PASSWORD ]]
+                if [[ $CR_USERNAME && $CR_PASSWORD ]]
                 then
                   echo "Logging into registry $REGISTRY_URL"
-                  buildah login -u "$ICR_USERNAME" -p "$ICR_PASSWORD" "$REGISTRY_URL"
+                  buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
                 fi
 
                 echo "Pushing image to the registry"
-                buildah push "$APP_IMAGE" "docker://$APP_IMAGE"
+                buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
           }
         }
