@@ -96,7 +96,7 @@ spec:
                 fi
 
                 echo "Pushing image to the registry"
-                buildah push "$APP_IMAGE" "docker://$APP_IMAGE"
+                buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
           }
         }
