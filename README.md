@@ -31,6 +31,11 @@ helm install jenkins stable/jenkins -f values.yaml --namespace jenkins
 . helpers/port-forward.sh 
 ```
 
+### Redeploy
+```
+helm upgrade -f jenkins/values.yaml jenkins stable/jenkins --namespace jenkins
+```
+
 ## Set up Secrets and Config
 1. Add Git repo access token
 ```
