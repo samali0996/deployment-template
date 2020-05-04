@@ -6,6 +6,9 @@ master:
     - workflow-aggregator:latest
     - credentials-binding:latest
     - git:latest
+  containerEnv:
+    - name: namespace
+      value: jenkins
 #   resources:
 #     requests:
 #       cpu: "50m"

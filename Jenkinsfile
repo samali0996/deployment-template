@@ -21,6 +21,8 @@ spec:
         secretKeyRef:
           name: git-credentials
           key: password
+    - name: NAMESPACE
+      value: ${env.namespace}
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
@@ -66,6 +68,7 @@ spec:
         stage('Initialize') {
             sh'''#!/bin/bash
             set -e +x
+            echo "Namespace is $NAMESPACE"
             APP_VERSION="$(git rev-parse --short HEAD)"
             echo "APP_VERSION=$APP_VERSION" > ./env-config
             cat ./env-config
