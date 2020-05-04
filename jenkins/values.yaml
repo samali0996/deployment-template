@@ -6,7 +6,8 @@ master:
     - workflow-aggregator:latest
     - credentials-binding:latest
     - git:latest
-  containerEnv:
+agent:
+  envVars:
     - name: NAMESPACE
       value: jenkins
 #   resources:
