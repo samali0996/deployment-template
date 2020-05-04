@@ -66,7 +66,6 @@ spec:
         stage('Initialize') {
             sh'''#!/bin/bash
             set -e +x
-            echo "Namespace is $NAMESPACE"
             APP_VERSION="$(git rev-parse --short HEAD)"
             echo "APP_VERSION=$APP_VERSION" > ./env-config
             cat ./env-config
