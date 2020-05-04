@@ -1,5 +1,4 @@
-//need to uppercase
-def namespace = env.namespace
+def namespace = env.NAMESPACE
 
 println """
 Namespace: ${namespace}
