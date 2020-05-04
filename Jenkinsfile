@@ -1,10 +1,3 @@
-def namespace = env.NAMESPACE
-
-println """
-Namespace: ${namespace}
-
-"""
-
 podTemplate(yaml:'''
 metadata:
   namespace: jenkins
