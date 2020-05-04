@@ -7,7 +7,7 @@ master:
     - credentials-binding:latest
     - git:latest
   containerEnv:
-    - name: namespace
+    - name: NAMESPACE
       value: jenkins
 #   resources:
 #     requests:
