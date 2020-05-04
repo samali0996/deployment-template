@@ -1,3 +1,11 @@
+//need to uppercase
+def namespace = env.namespace
+
+println """
+Namespace: ${namespace}
+
+"""
+
 podTemplate(yaml:'''
 metadata:
   namespace: jenkins
@@ -22,7 +30,7 @@ spec:
           name: git-credentials
           key: password
     - name: NAMESPACE
-      value: ${env.namespace}
+      value: jenkins
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
