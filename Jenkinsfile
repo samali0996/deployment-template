@@ -21,8 +21,6 @@ spec:
         secretKeyRef:
           name: git-credentials
           key: password
-    - name: NAMESPACE
-      value: jenkins
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
