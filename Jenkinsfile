@@ -95,6 +95,7 @@ spec:
                 fi
 
                 if [[ $PERFORM_REGISTRY_PUSH ]]
+                then
                 echo "Pushing image to the registry"
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 fi
