@@ -61,6 +61,7 @@ spec:
     emptyDir: {}
 ''') {
     node(POD_LABEL) {
+      //Explicily call the jnlp container
         stage('Git Clone') {
             // checks out the source the JenkinsFile is taken from
             checkout scm
@@ -102,5 +103,12 @@ spec:
                 '''
           }
         }
+      stage ("Deploy to dev") {
+        sh '''#!/bin/bash
+          set -e
+          . ./env-config
+
+        '''
+      }
     }
 }
