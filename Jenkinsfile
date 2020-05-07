@@ -55,7 +55,7 @@ spec:
     - name: TLS_VERIFY
       value: "false"
     - name: PERFORM_REGISTRY_PUSH
-      value: 0
+      value: "false"
   volumes:
   - name: home-volume
     emptyDir: {}
@@ -94,7 +94,7 @@ spec:
                   buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
                 fi
 
-                if [[ $PERFORM_REGISTRY_PUSH ]]
+                if $PERFORM_REGISTRY_PUSH
                 then
                 echo "Pushing image to the registry"
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
