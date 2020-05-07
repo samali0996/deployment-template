@@ -28,7 +28,7 @@ helm install jenkins stable/jenkins -f values.yaml --namespace jenkins
 ```
 5. Access the Jenkins UI
 ```
-. helpers/port-forward.sh 
+. helpers/jenkins-ui.sh 
 ```
 
 ### Redeploy
@@ -60,7 +60,7 @@ kubectl apply -f dashboard-adminuser.yaml
 ```
 3. Access dashboard
 ```
-. helpers/proxy-dashboard.sh
+. helpers/dashboard-ui.sh
 ```
 - add git credentials as secrets
 - add icr credentials as secrets
