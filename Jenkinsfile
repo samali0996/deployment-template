@@ -3,8 +3,10 @@ metadata:
   namespace: jenkins
 spec:
   containers:
-  - name: jnlp
-    image: garagecatalyst/ibmcloud-dev:1.0.10
+  - name: ibmcloud
+    image: docker.io/garagecatalyst/ibmcloud-dev:1.0.10
+    tty: true
+    command: ["bin/bash"]
     volumeMounts:
     - name: home-volume
       mountPath: /home/jenkins
