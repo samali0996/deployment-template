@@ -4,7 +4,7 @@ metadata:
 spec:
   containers:
   - name: jnlp
-    image: jenkins/jnlp-slave:4.0.1-1
+    image: alpine:3.9.6
     volumeMounts:
     - name: home-volume
       mountPath: /home/jenkins
