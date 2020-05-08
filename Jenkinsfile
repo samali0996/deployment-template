@@ -22,7 +22,7 @@ spec:
           name: git-credentials
           key: password
   - name: kube-tools
-    image: alpine:3.11
+    image: dtzar/helm-kubectl:3.2.0
     tty: true
     volumeMounts:
     - name: home-volume
