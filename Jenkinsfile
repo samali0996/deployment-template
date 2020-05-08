@@ -4,7 +4,7 @@ metadata:
 spec:
   containers:
   - name: ibmcloud
-    image: docker.io/garagecatalyst/ibmcloud-dev:1.0.10
+    image: docker.io/sam0996/helm:1.0.10
     tty: true
     command: ["/bin/bash"]
     volumeMounts:
