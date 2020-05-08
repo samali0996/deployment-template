@@ -84,27 +84,25 @@ spec:
           }
         }
         container('buildah') {
-          if (false){
-            stage('Build Image') {
-              sh '''#!/bin/bash
-                  set -e +x
-                  . ./env-config
+          stage('Build Image') {
+            sh '''#!/bin/bash
+                set -e +x
+                . ./env-config
 
-                  APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
-                  echo "Building image $APP_IMAGE"
+                APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
+                echo "Building image $APP_IMAGE"
 
-                  buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
+                buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
 
-                  if [[ $CR_USERNAME && $CR_PASSWORD ]]
-                  then
-                    echo "Logging into registry $REGISTRY_URL"
-                    buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
-                  fi
+                if [[ $CR_USERNAME && $CR_PASSWORD ]]
+                then
+                  echo "Logging into registry $REGISTRY_URL"
+                  buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
+                fi
 
-                  echo "Pushing image to the registry"
-                  buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
-                  '''
-            }
+                echo "Pushing image to the registry"
+                buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
+                '''
           }
         }
         container('ibmcloud') {
