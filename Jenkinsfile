@@ -110,9 +110,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              echo "$(kubectl version --client)"  
-              echo "$(helm version)"
-              kubectl get namespaces
+              helm search hub
             '''
           }
         }
