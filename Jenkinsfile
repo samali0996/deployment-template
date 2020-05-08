@@ -6,7 +6,7 @@ spec:
   - name: ibmcloud
     image: docker.io/garagecatalyst/ibmcloud-dev:1.0.10
     tty: true
-    command: ["bin/bash"]
+    command: ["/bin/bash"]
     volumeMounts:
     - name: home-volume
       mountPath: /home/jenkins
