@@ -23,6 +23,14 @@ spec:
           key: password
   - name: kube-tools
     image: alpine:3.11
+    tty: true
+    command: ["/bin/bash"]
+    volumeMounts:
+    - name: home-volume
+      mountPath: /home/jenkins
+    env:
+    - name: HOME
+      value: /home/jenkins
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
