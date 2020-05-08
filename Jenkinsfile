@@ -112,7 +112,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm search hub
+              kubectl get namespaces
             '''
           }
         }
