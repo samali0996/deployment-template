@@ -24,7 +24,7 @@ spec:
   - name: kube-tools
     image: alpine:3.11
     tty: true
-    command: ["/bin/bash"]
+    command: ["bash"]
     volumeMounts:
     - name: home-volume
       mountPath: /home/jenkins
