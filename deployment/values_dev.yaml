@@ -1,0 +1,7 @@
+# Helm chart values override for dev
+
+replicaCount: 1
+
+# Specified by the command-line (--set image.tag=<version>)
+#image:
+#  tag: 2

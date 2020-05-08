@@ -3,8 +3,10 @@ metadata:
   namespace: jenkins
 spec:
   containers:
-  - name: jnlp
-    image: jenkins/jnlp-slave:4.0.1-1
+  - name: ibmcloud
+    image: docker.io/garagecatalyst/ibmcloud-dev:1.0.10
+    tty: true
+    command: ["/bin/bash"]
     volumeMounts:
     - name: home-volume
       mountPath: /home/jenkins
@@ -59,42 +61,61 @@ spec:
     emptyDir: {}
 ''') {
     node(POD_LABEL) {
-        stage('Git Clone') {
-            // checks out the source the JenkinsFile is taken from
-            checkout scm
+        container('ibmcloud')
+        {
+          stage('Git Clone') {
+              // checks out the source the JenkinsFile is taken from
+              checkout scm
+          }
         }
-        stage('Initialize') {
-            sh'''#!/bin/bash
-            set -e +x
-            APP_VERSION="$(git rev-parse --short HEAD)"
-            echo "APP_VERSION=$APP_VERSION" > ./env-config
-            cat ./env-config
+        container('ibmcloud') {
+          stage('Initialize') {
+              sh'''#!/bin/bash
+              set -e +x
 
-            git config --global user.email "${APP_NAME}@ci"
-            git config --global user.name "Jenkins CI"
-            git config --global credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f"
-            '''
+              APP_VERSION="$(git rev-parse --short HEAD)"
+              echo "APP_VERSION=$APP_VERSION" > ./env-config
+              cat ./env-config
+
+              git config --global user.email "${APP_NAME}@ci"
+              git config --global user.name "Jenkins CI"
+              git config --global credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f"
+              '''
+          }
         }
         container('buildah') {
-          stage('Build Image') {
+          if (false){
+            stage('Build Image') {
+              sh '''#!/bin/bash
+                  set -e +x
+                  . ./env-config
+
+                  APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
+                  echo "Building image $APP_IMAGE"
+
+                  buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
+
+                  if [[ $CR_USERNAME && $CR_PASSWORD ]]
+                  then
+                    echo "Logging into registry $REGISTRY_URL"
+                    buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
+                  fi
+
+                  echo "Pushing image to the registry"
+                  buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
+                  '''
+            }
+          }
+        }
+        container('ibmcloud') {
+          stage ("Deploy to dev") {
             sh '''#!/bin/bash
-                set -e +x
-                . ./env-config
-
-                APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
-                echo "Building image $APP_IMAGE"
-
-                buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
-
-                if [[ $CR_USERNAME && $CR_PASSWORD ]]
-                then
-                  echo "Logging into registry $REGISTRY_URL"
-                  buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
-                fi
-
-                echo "Pushing image to the registry"
-                buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
-                '''
+              set -e
+              . ./env-config
+              echo "$(kubectl version --client)"  
+              echo "$(helm version)"
+              kubectl get namespaces
+            '''
           }
         }
     }
