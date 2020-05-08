@@ -4,7 +4,7 @@ metadata:
 spec:
   containers:
   - name: jnlp
-    image: jenkins/jnlp-slave:4.0.1-1
+    image: garagecatalyst/ibmcloud-dev:1.0.10
     volumeMounts:
     - name: home-volume
       mountPath: /home/jenkins
