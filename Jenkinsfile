@@ -113,12 +113,15 @@ spec:
                 '''
           }
         }
-      stage ("Deploy to dev") {
-        sh '''#!/bin/bash
-          set -e
-          . ./env-config
-
-        '''
-      }
+        container('kube-tools') {
+          stage ("Deploy to dev") {
+            sh '''#!/bin/bash
+              set -e
+              . ./env-config
+              kubectl version --client
+              helm version
+            '''
+          }
+        }
     }
 }
