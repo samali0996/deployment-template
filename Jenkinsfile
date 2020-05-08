@@ -118,8 +118,8 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              kubectl version --client
-              helm version
+              echo "$(kubectl version --client)"  
+              echo "$(helm version)"  
             '''
           }
         }
