@@ -4,7 +4,7 @@ metadata:
 spec:
   containers:
   - name: ibmcloud
-    image: docker.io/sam0996/helm:1.0.10
+    image: docker.io/sam0996/helm:1.0
     tty: true
     command: ["/bin/bash"]
     volumeMounts:
