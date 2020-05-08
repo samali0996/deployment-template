@@ -119,7 +119,8 @@ spec:
               set -e
               . ./env-config
               echo "$(kubectl version --client)"  
-              echo "$(helm version)"  
+              echo "$(helm version)"
+              kubectl get namespaces
             '''
           }
         }
