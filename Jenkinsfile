@@ -23,15 +23,6 @@ spec:
         secretKeyRef:
           name: git-credentials
           key: password
-  - name: kube-tools
-    image: dtzar/helm-kubectl:3.2.0
-    tty: true
-    volumeMounts:
-    - name: home-volume
-      mountPath: /home/jenkins
-    env:
-    - name: HOME
-      value: /home/jenkins
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
@@ -70,23 +61,27 @@ spec:
     emptyDir: {}
 ''') {
     node(POD_LABEL) {
-      //Explicily call the jnlp container
-        stage('Git Clone') {
-            // checks out the source the JenkinsFile is taken from
-            checkout scm
+        container('ibmcloud')
+        {
+          stage('Git Clone') {
+              // checks out the source the JenkinsFile is taken from
+              checkout scm
+          }
         }
-        stage('Initialize') {
-            sh'''#!/bin/bash
-            set -e +x
+        container('ibmcloud') {
+          stage('Initialize') {
+              sh'''#!/bin/bash
+              set -e +x
 
-            APP_VERSION="$(git rev-parse --short HEAD)"
-            echo "APP_VERSION=$APP_VERSION" > ./env-config
-            cat ./env-config
+              APP_VERSION="$(git rev-parse --short HEAD)"
+              echo "APP_VERSION=$APP_VERSION" > ./env-config
+              cat ./env-config
 
-            git config --global user.email "${APP_NAME}@ci"
-            git config --global user.name "Jenkins CI"
-            git config --global credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f"
-            '''
+              git config --global user.email "${APP_NAME}@ci"
+              git config --global user.name "Jenkins CI"
+              git config --global credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; f"
+              '''
+          }
         }
         container('buildah') {
           if (false){
@@ -112,7 +107,7 @@ spec:
             }
           }
         }
-        container('kube-tools') {
+        container('ibmcloud') {
           stage ("Deploy to dev") {
             sh '''#!/bin/bash
               set -e
