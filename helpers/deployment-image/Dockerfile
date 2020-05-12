@@ -11,4 +11,6 @@ RUN apk add --no-cache ca-certificates bash git openssl curl \
     && wget -q https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar -zxO linux-amd64/helm > /usr/local/bin/helm \
     && chmod +x /usr/local/bin/helm
 
+#Changed user
+
 CMD [ "bash" ]
