@@ -4,7 +4,7 @@ println"""
 Branch: ${branch}
 """
 
-podTemplate(yaml:'''
+podTemplate(yaml:"""
 metadata:
   namespace: jenkins
 spec:
@@ -67,7 +67,7 @@ spec:
   volumes:
   - name: home-volume
     emptyDir: {}
-''') {
+""") {
     node(POD_LABEL) {
         container('ibmcloud')
         {
