@@ -1,6 +1,6 @@
 println """
 
-${env.BRANCH}
+the branch is: ${env.BRANCH}
 
 """
 
