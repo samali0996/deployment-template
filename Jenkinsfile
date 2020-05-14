@@ -73,7 +73,7 @@ spec:
               sh'''#!/bin/bash
               set -e +x
 
-              APP_VERSION="$(git rev-parse --short HEAD)"
+              APP_VERSION="$(git rev-parse --short HEAD)$(git rev-parse --abbrev-ref HEAD)"
               echo "APP_VERSION=$APP_VERSION" > ./env-config
               cat ./env-config
 
@@ -84,6 +84,7 @@ spec:
           }
         }
         container('buildah') {
+          if(false){
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
@@ -103,6 +104,7 @@ spec:
                 echo "Pushing image to the registry"
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
+          }
           }
         }
         container('ibmcloud') {
