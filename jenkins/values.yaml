@@ -15,5 +15,6 @@ master:
       memory: "512Mi"
   slaveKubernetesNamespace: jenkins
 persistence:
-  enabled: false
+  # enabled: false
+  existingClaim: jenkins-pv-claim
 namespaceOverride: jenkins

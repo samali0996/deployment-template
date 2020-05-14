@@ -84,7 +84,6 @@ spec:
           }
         }
         container('buildah') {
-          if(false){
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
@@ -104,7 +103,6 @@ spec:
                 echo "Pushing image to the registry"
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
-          }
           }
         }
         container('ibmcloud') {
