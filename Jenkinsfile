@@ -1,9 +1,8 @@
-println """
+def branch = env.BRANCH_NAME
 
-the branch is: ${env.BRANCH_NAME}
-
+println"""
+Branch: ${branch}
 """
-
 
 podTemplate(yaml:'''
 metadata:
@@ -30,6 +29,8 @@ spec:
         secretKeyRef:
           name: git-credentials
           key: password
+    - name: BRANCH
+      value: ${branch}
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
