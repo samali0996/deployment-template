@@ -1,3 +1,10 @@
+println """
+
+${env.BRANCH}
+
+"""
+
+
 podTemplate(yaml:'''
 metadata:
   namespace: jenkins
