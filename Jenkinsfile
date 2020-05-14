@@ -73,7 +73,7 @@ spec:
               sh'''#!/bin/bash
               set -e +x
 
-              APP_VERSION="$(git rev-parse --short HEAD)$(git rev-parse --abbrev-ref HEAD)"
+              APP_VERSION="$(git rev-parse --short HEAD)-$(git rev-parse --abbrev-ref HEAD)"
               echo "APP_VERSION=$APP_VERSION" > ./env-config
               cat ./env-config
 
