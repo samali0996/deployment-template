@@ -2,6 +2,9 @@
 
 replicaCount: 1
 
+registry:
+  imagePullSecretsName: cr-credentials
+
 # Specified by the command-line (--set image.tag=<version>)
 #image:
 #  tag: 2

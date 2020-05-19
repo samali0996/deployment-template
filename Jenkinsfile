@@ -121,6 +121,7 @@ spec:
               set -e
               . ./env-config
               kubectl get namespaces
+              kubectl run my-app --image=us.icr.io/samskubetut/deployment-template:1ab08fc
             '''
           }
         }
