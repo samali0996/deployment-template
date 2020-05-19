@@ -9,3 +9,4 @@ spec:
   containers:
     - name: my-app
       image: us.icr.io/samskubetut/deployment-template:1ab08fc
+      imagePullPolicy: Always
