@@ -64,4 +64,8 @@ kubectl apply -f dashboard-adminuser.yaml
 ```
 - add git credentials as secrets
 - add icr credentials as secrets
-- k apply -f jenkins/icr-configmap.yaml  
+- k apply -f jenkins/icr-configmap.yaml 
+
+```
+k --namespace dev create secret docker-registry container-registry --docker-server=us.icr.io --docker-username=iamapikey --docker-password=<apikey> --docker-email=a@b.c
+```

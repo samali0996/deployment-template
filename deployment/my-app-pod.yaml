@@ -5,7 +5,7 @@ metadata:
   namespace: dev
 spec:
   imagePullSecrets:
-    - name: cr-credentials
+    - name: container-registry
   containers:
     - name: my-app
       image: us.icr.io/samskubetut/deployment-template:1ab08fc
