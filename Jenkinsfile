@@ -73,13 +73,13 @@ spec:
     emptyDir: {}
 """) {
     node(POD_LABEL) {
-        container('ibmcloud', shell: '/bin/bash') {
+        container(name: 'ibmcloud', shell: '/bin/bash') {
           stage('Git Clone') {
               // checks out the source the JenkinsFile is taken from
               checkout scm
           }
         }
-        container('ibmcloud', shell: '/bin/bash') {
+        container(name: 'ibmcloud', shell: '/bin/bash') {
           stage('Initialize') {
               sh'''#!/bin/bash
               set -e +x
@@ -94,7 +94,7 @@ spec:
               '''
           }
         }
-        container('buildah', shell: '/bin/bash') {
+        container(name: 'buildah', shell: '/bin/bash') {
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
@@ -116,7 +116,7 @@ spec:
                 '''
           }
         }
-        container('ibmcloud', shell: '/bin/bash') {
+        container(name: 'ibmcloud', shell: '/bin/bash') {
           stage ("Deploy to dev") {
             sh '''#!/bin/bash
               set -e
