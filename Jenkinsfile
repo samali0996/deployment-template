@@ -1,7 +1,11 @@
 def branch = env.BRANCH_NAME
+def jobName = env.JOB_NAME
+def buildNumber = env.BUILD_NUMBER
 
 println"""
 Branch: ${branch}
+Build Number: ${buildNumber}
+Job Name: ${jobName}
 """
 
 podTemplate(yaml:"""
@@ -69,14 +73,13 @@ spec:
     emptyDir: {}
 """) {
     node(POD_LABEL) {
-        container('ibmcloud')
-        {
+        container('ibmcloud', shell: '/bin/bash') {
           stage('Git Clone') {
               // checks out the source the JenkinsFile is taken from
               checkout scm
           }
         }
-        container('ibmcloud') {
+        container('ibmcloud', shell: '/bin/bash') {
           stage('Initialize') {
               sh'''#!/bin/bash
               set -e +x
@@ -91,8 +94,7 @@ spec:
               '''
           }
         }
-        container('buildah') {
-          if(false){
+        container('buildah', shell: '/bin/bash') {
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
@@ -113,9 +115,8 @@ spec:
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
           }
-          }
         }
-        container('ibmcloud') {
+        container('ibmcloud', shell: '/bin/bash') {
           stage ("Deploy to dev") {
             sh '''#!/bin/bash
               set -e
