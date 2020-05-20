@@ -3,7 +3,11 @@
 replicaCount: 1
 
 registry:
-  imagePullSecretsName: cr-credentials
+  imagePullSecretsName: container-registry
+
+service:
+  type: NodePort
+  targetPort: 3000
 
 # Specified by the command-line (--set image.tag=<version>)
 #image:

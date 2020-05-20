@@ -120,8 +120,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              kubectl get namespaces
-              kubectl apply -f deployment/my-app-pod.yaml
+              helm install my-app deployment/deployment-tools -f deployment/values_dev.yaml --set image.tag=1.0.0 --namespace dev
             '''
           }
         }
