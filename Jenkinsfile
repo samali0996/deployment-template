@@ -121,7 +121,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade my-app deployment/deployment-tools -f deployment/values_dev.yaml --install --set image.tag=1ab08fc --namespace dev --atomic
+              helm upgrade $APP_NAME deployment/deployment-tools -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic
             '''
           }
         }
