@@ -9,7 +9,7 @@
 //   return sanitize(build.projectName.substring(i + 1)).toLowerCase()
 // }
 
-def appName = env.BUILD_TAG
+def appName = env.JOB_BASE_NAME
 def branch = env.BRANCH_NAME
 def jobName = env.JOB_NAME
 def buildNumber = env.BUILD_NUMBER
