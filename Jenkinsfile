@@ -1,3 +1,9 @@
+def computeAppName(RunWrapper build) {
+  def i = build.projectName.indexOf('.')
+  return sanitize(build.projectName.substring(i + 1)).toLowerCase()
+}
+
+def appName = computeAppName(currentBuild)
 def branch = env.BRANCH_NAME
 def jobName = env.JOB_NAME
 def buildNumber = env.BUILD_NUMBER
@@ -35,6 +41,8 @@ spec:
           key: password
     - name: BRANCH
       value: ${branch}
+    - name: APP_NAME
+      value: ${appName}
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
