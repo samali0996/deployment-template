@@ -15,6 +15,7 @@ def jobName = env.JOB_NAME
 def buildNumber = env.BUILD_NUMBER
 
 println"""
+App Name: ${appName}
 Branch: ${branch}
 Build Number: ${buildNumber}
 Job Name: ${jobName}
