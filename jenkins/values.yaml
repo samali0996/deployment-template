@@ -1,4 +1,8 @@
 master:
+  ingress:
+  # add tls, try to enforce tls
+    enabled: true
+    hostName: jenkins.<hostname>
   installPlugins:
     - kubernetes:latest
     - kubernetes-credentials-provider:latest
@@ -13,8 +17,8 @@ master:
     limits:
       cpu: "1"
       memory: "512Mi"
-  slaveKubernetesNamespace: jenkins
+  slaveKubernetesNamespace: deploy-tools
 persistence:
-  # enabled: false
-  existingClaim: jenkins-pv-claim
-namespaceOverride: jenkins
+  enabled: false
+  # existingClaim: jenkins-pv-claim
+namespaceOverride: deploy-tools
