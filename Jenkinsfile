@@ -1,15 +1,15 @@
-import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
+// import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 
-def sanitize(name) {
-  return name.replaceAll('[^\\p{IsAlphabetic}\\d]', '-')
-}
+// def sanitize(name) {
+//   return name.replaceAll('[^\\p{IsAlphabetic}\\d]', '-')
+// }
 
-def computeAppName(RunWrapper build) {
-  def i = build.projectName.indexOf('.')
-  return sanitize(build.projectName.substring(i + 1)).toLowerCase()
-}
+// def computeAppName(RunWrapper build) {
+//   def i = build.projectName.indexOf('.')
+//   return sanitize(build.projectName.substring(i + 1)).toLowerCase()
+// }
 
-def appName = computeAppName(currentBuild)
+def appName = env.BUILD_TAG
 def branch = env.BRANCH_NAME
 def jobName = env.JOB_NAME
 def buildNumber = env.BUILD_NUMBER
@@ -110,6 +110,7 @@ spec:
           }
         }
         container(name: 'buildah', shell: '/bin/bash') {
+          if (false) {
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
@@ -129,6 +130,7 @@ spec:
                 echo "Pushing image to the registry"
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
+          }
           }
         }
         container(name: 'ibmcloud', shell: '/bin/bash') {
