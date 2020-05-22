@@ -13,12 +13,14 @@ def appName = env.JOB_BASE_NAME
 def branch = env.BRANCH_NAME
 def jobName = env.JOB_NAME
 def buildNumber = env.BUILD_NUMBER
+def buildTag = env.BUILD_TAG
 
 println"""
 App Name: ${appName}
 Branch: ${branch}
 Build Number: ${buildNumber}
 Job Name: ${jobName}
+Build Tag: ${buildTag}
 """
 
 podTemplate(yaml:"""
