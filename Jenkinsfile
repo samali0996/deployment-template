@@ -76,7 +76,7 @@ spec:
           name: cr-credentials
           key: password
     - name: APP_NAME
-      value: deployment-template
+      value: ${appName}
     - name: DOCKERFILE
       value: ./Dockerfile
     - name: CONTEXT
