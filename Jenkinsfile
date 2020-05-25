@@ -11,7 +11,7 @@
 
 def appName = env.JOB_BASE_NAME
 def branch = env.BRANCH_NAME
-def jobName = env.JOB_NAME
+def jobName = env.JOB_NAME.toLowerCase().replaceAll('/', '-')
 def buildNumber = env.BUILD_NUMBER
 def buildTag = env.BUILD_TAG
 
