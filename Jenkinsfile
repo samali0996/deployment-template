@@ -20,7 +20,7 @@ def computeAppName(name, branch) {
   return name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
 }
 
-def computeHelmChartName(name) {
+def computeHelmChartName(name, branch) {
   return name.toLowerCase().replaceAll("/${branch}", "")
 }
 
@@ -28,7 +28,7 @@ def computeHelmChartName(name) {
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
 def appName = computeAppName(env.JOB_NAME, branch)
-def helmChartName = computeHelmChartName(env.JOB_NAME)
+def helmChartName = computeHelmChartName(env.JOB_NAME, branch)
 def timestamp = computeTimestamp(currentBuild)
 
 
