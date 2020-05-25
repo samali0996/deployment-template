@@ -15,10 +15,20 @@ def computeTimestamp(RunWrapper build) {
   return new SimpleDateFormat('yyyyMMdd-HHmmss').format(date)
 }
 
+def computeAppName(name, branch) {
+  def nameSuffix = branch == "master" ? "" : "-${branch}"
+  return name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
+}
+
+def computeHelmChartName(name, branch) {
+  return name.toLowerCase().replaceAll("/${branch}", "")
+}
+
 
 def branch = env.BRANCH_NAME
-def appName = env.JOB_NAME.toLowerCase().replaceAll("/${branch}", "")
 def buildNumber = env.BUILD_NUMBER
+def appName = computeAppName(env.JOB_NAME, branch)
+def helmChartName = computeHelmChartName(env.JOB_NAME, branch)
 def timestamp = computeTimestamp(currentBuild)
 
 
@@ -27,6 +37,7 @@ App Name: ${appName}
 Branch: ${branch}
 Build Number: ${buildNumber}
 Timestamp: ${timestamp}
+Helm Chart Name: ${helmChartName}
 """
 
 podTemplate(yaml:"""
@@ -61,6 +72,8 @@ spec:
       value: ${branch}
     - name: APP_NAME
       value: ${appName}
+    - name: HELM_CHART_NAME
+      value: ${helmChartName}
     - name: TIMESTAMP
       value: ${timestamp}
   - name: buildah
@@ -125,6 +138,7 @@ spec:
           }
         }
         container(name: 'buildah', shell: '/bin/bash') {
+          if (true){
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
@@ -144,13 +158,14 @@ spec:
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
           }
-        }
+        }}
         container(name: 'ibmcloud', shell: '/bin/bash') {
           stage ("Deploy to dev") {
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade $APP_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 30s
+              # APP_VERSION=20200525-212602-b9c6b3a-dev
+              helm upgrade $APP_NAME deployment/$HELM_CHART_NAME -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 45s
             '''
           }
         }
