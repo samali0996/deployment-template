@@ -151,8 +151,8 @@ spec:
           }
         }
         container(name: 'buildah', shell: '/bin/bash') {
-          if (!SKIP_BUILD_STAGE){
           stage('Build Image') {
+          if (!SKIP_BUILD_STAGE){
             sh '''#!/bin/bash
                 set -e +x
                 . ./env-config
@@ -170,8 +170,8 @@ spec:
                 echo "Pushing image to the registry"
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
-          }
-        }}
+          }}
+        }
         container(name: 'ibmcloud', shell: '/bin/bash') {
           stage ("Deploy to dev") {
             sh '''#!/bin/bash
