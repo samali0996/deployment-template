@@ -153,7 +153,7 @@ spec:
               set -e
               . ./env-config
               helm version
-              helm upgrade $APP_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 30s
+              helm upgrade $APP_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.tag=3ba9cf4-dev --namespace dev --atomic --cleanup-on-fail --timeout 30s
             '''
           }
         }
