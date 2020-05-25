@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: us.icr.io/samskubetut/deployment-template
+  repository: us.icr.io/samskubetut/deployment-tools
   pullPolicy: Always
 
 imagePullSecrets: []
