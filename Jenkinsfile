@@ -102,7 +102,7 @@ spec:
               APP_VERSION="$(git rev-parse --short HEAD)-$BRANCH"
               APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
               echo "APP_VERSION=$APP_VERSION" >> ./env-config
-              echo "APP_IMAGE=$APP_VERSION" >> ./env-config
+              echo "APP_IMAGE=$APP_IMAGE" >> ./env-config
               cat ./env-config
 
               git config --global user.email "${APP_NAME}@ci"
