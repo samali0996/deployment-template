@@ -42,6 +42,8 @@ Branch: ${branch}
 Build Number: ${buildNumber}
 Timestamp: ${timestamp}
 Helm Chart Name: ${helmChartName}
+Skip Build Stage = ${SKIP_BUILD_STAGE}
+Default Image Tag = ${DEFAULT_IMAGE_TAG}
 """
 
 podTemplate(yaml:"""
