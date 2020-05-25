@@ -61,6 +61,8 @@ spec:
       value: ${branch}
     - name: APP_NAME
       value: ${appName}
+    - name: TIMESTAMP
+      value: ${timestamp}
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
@@ -110,7 +112,7 @@ spec:
               sh'''#!/bin/bash
               set -e +x
 
-              APP_VERSION="$(git rev-parse --short HEAD)-$BRANCH"
+              APP_VERSION="$TIMESTAMP-$(git rev-parse --short HEAD)-$BRANCH"
               APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
               echo "APP_VERSION=$APP_VERSION" >> ./env-config
               echo "APP_IMAGE=$APP_IMAGE" >> ./env-config
