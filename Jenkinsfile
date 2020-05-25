@@ -9,10 +9,18 @@
 //   return sanitize(build.projectName.substring(i + 1)).toLowerCase()
 // }
 
+import java.text.SimpleDateFormat
+
+def computeTimestamp(RunWrapper build) {
+  def date = new Date(build.timeInMillis)
+  return new SimpleDateFormat('yyyyMMdd-HHmmss').format(date)
+}
+
+
 def branch = env.BRANCH_NAME
 def appName = env.JOB_NAME.toLowerCase().replaceAll("/${branch}", "")
 def buildNumber = env.BUILD_NUMBER
-def timestamp = env.TAG_TIMESTAMP
+def timestamp = computeTimestamp(currentBuild)
 
 
 println"""
