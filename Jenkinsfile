@@ -81,7 +81,7 @@ spec:
     - name: TIMESTAMP
       value: ${timestamp}
     - name: DEFAULT_IMAGE_TAG
-      value ${DEFAULT_IMAGE_TAG}
+      value: ${DEFAULT_IMAGE_TAG}
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
