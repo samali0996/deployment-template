@@ -15,9 +15,14 @@ def computeTimestamp(RunWrapper build) {
   return new SimpleDateFormat('yyyyMMdd-HHmmss').format(date)
 }
 
+def computeAppName(name) {
+  def nameSuffix = branch == 'master' ? '' : "-${branch}"
+  name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
+}
+
 
 def branch = env.BRANCH_NAME
-def appName = env.JOB_NAME.toLowerCase().replaceAll("/${branch}", "")
+def appName = computeAppName(env.JOB_NAME)
 def buildNumber = env.BUILD_NUMBER
 def timestamp = computeTimestamp(currentBuild)
 
