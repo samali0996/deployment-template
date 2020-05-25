@@ -16,7 +16,7 @@ def computeTimestamp(RunWrapper build) {
 }
 
 def computeAppName(name, branch) {
-  def nameSuffix = branch == 'master' ? '' : "-${branch}"
+  def nameSuffix = branch == "master" ? "" : "-${branch}"
   name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
 }
 
@@ -24,7 +24,7 @@ def computeAppName(name, branch) {
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
 def appName = computeAppName(env.JOB_NAME, branch)
-def helmChartName = computeAppName(env.JOB_NAME, 'master')
+def helmChartName = computeAppName(env.JOB_NAME, "master")
 def timestamp = computeTimestamp(currentBuild)
 
 
@@ -33,6 +33,7 @@ App Name: ${appName}
 Branch: ${branch}
 Build Number: ${buildNumber}
 Timestamp: ${timestamp}
+Helm Chart Name: ${helmChartName}
 """
 
 podTemplate(yaml:"""
