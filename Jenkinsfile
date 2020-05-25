@@ -164,7 +164,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade $APP_NAME deployment/$HELM_CHART_NAME -f deployment/values_dev.yaml --install --set image.tag=20200525-212602-b9c6b3a-dev --namespace dev --atomic --cleanup-on-fail
+              helm upgrade $APP_NAME deployment/$HELM_CHART_NAME -f deployment/values_dev.yaml --install --set image.tag=20200525-212602-b9c6b3a-dev --namespace dev --atomic --cleanup-on-fail --timeout 45s
             '''
           }
         }
