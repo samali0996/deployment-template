@@ -138,6 +138,7 @@ spec:
           }
         }
         container(name: 'buildah', shell: '/bin/bash') {
+          if (false){
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
@@ -157,7 +158,7 @@ spec:
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
           }
-        }
+        }}
         container(name: 'ibmcloud', shell: '/bin/bash') {
           stage ("Deploy to dev") {
             sh '''#!/bin/bash
