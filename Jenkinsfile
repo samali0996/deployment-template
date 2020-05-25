@@ -24,6 +24,7 @@ def computeAppName(name, branch) {
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
 def appName = computeAppName(env.JOB_NAME, branch)
+def helmChartName = computeAppName(env.JOB_NAME, 'master')
 def timestamp = computeTimestamp(currentBuild)
 
 
@@ -66,6 +67,8 @@ spec:
       value: ${branch}
     - name: APP_NAME
       value: ${appName}
+    - name: HELM_CHART_NAME
+      value: ${helmChartName}
     - name: TIMESTAMP
       value: ${timestamp}
   - name: buildah
@@ -155,7 +158,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade $APP_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 30s
+              helm upgrade $APP_NAME deployment/$HELM_CHART_NAME -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 30s
             '''
           }
         }
