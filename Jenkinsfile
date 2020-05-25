@@ -100,7 +100,9 @@ spec:
               set -e +x
 
               APP_VERSION="$(git rev-parse --short HEAD)-$BRANCH"
-              echo "APP_VERSION=$APP_VERSION" > ./env-config
+              APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
+              echo "APP_VERSION=$APP_VERSION" >> ./env-config
+              echo "APP_IMAGE=$APP_VERSION" >> ./env-config
               cat ./env-config
 
               git config --global user.email "${APP_NAME}@ci"
