@@ -10,13 +10,16 @@
 import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
+DEFAULT_BRANCH = 'master'
+SKIP_BUILD_STAGE = true
+
 def computeTimestamp(RunWrapper build) {
   def date = new Date(build.timeInMillis)
   return new SimpleDateFormat('yyyyMMdd-HHmmss').format(date)
 }
 
 def computeAppName(name, branch) {
-  def nameSuffix = branch == "master" ? "" : "-${branch}"
+  def nameSuffix = branch == DEFAULT_BRANCH ? "" : "-${branch}"
   return name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
 }
 
@@ -138,7 +141,7 @@ spec:
           }
         }
         container(name: 'buildah', shell: '/bin/bash') {
-          if (true){
+          if (SKIP_BUILD_STAGE){
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
