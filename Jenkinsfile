@@ -9,9 +9,8 @@
 //   return sanitize(build.projectName.substring(i + 1)).toLowerCase()
 // }
 
-def appName = env.JOB_BASE_NAME
 def branch = env.BRANCH_NAME
-def jobName = env.JOB_NAME.toLowerCase().replaceAll("/${branch}", "")
+def appName = env.JOB_NAME.toLowerCase().replaceAll("/${branch}", "")
 def buildNumber = env.BUILD_NUMBER
 def buildTag = env.BUILD_TAG
 
@@ -19,7 +18,6 @@ println"""
 App Name: ${appName}
 Branch: ${branch}
 Build Number: ${buildNumber}
-Job Name: ${jobName}
 Build Tag: ${buildTag}
 """
 
