@@ -8,5 +8,5 @@ spec:
     - name: container-registry
   containers:
     - name: my-app
-      image: us.icr.io/samskubetut/deployment-template:1ab08fc
+      image: us.icr.io/samskubetut/deployment-tools:3ba9cf4-dev
       imagePullPolicy: Always

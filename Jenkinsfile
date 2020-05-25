@@ -115,6 +115,8 @@ spec:
           }
         }
         container(name: 'buildah', shell: '/bin/bash') {
+          if (false)
+          {
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
@@ -134,6 +136,7 @@ spec:
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
           }
+          }
         }
         container(name: 'ibmcloud', shell: '/bin/bash') {
           stage ("Deploy to dev") {
@@ -141,7 +144,7 @@ spec:
               set -e
               . ./env-config
               helm version
-              helm upgrade $APP_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail
+              helm upgrade $APP_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.tag=3ba9cf4-dev --namespace dev --atomic --cleanup-on-fail
             '''
           }
         }
