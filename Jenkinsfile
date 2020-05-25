@@ -151,7 +151,7 @@ spec:
           }
         }
         container(name: 'buildah', shell: '/bin/bash') {
-          if (SKIP_BUILD_STAGE){
+          if (!SKIP_BUILD_STAGE){
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
