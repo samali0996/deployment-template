@@ -134,7 +134,7 @@ spec:
               set -e +x
 
               APP_VERSION="$TIMESTAMP-$(git rev-parse --short HEAD)-$BRANCH"
-              if [[ $SKIP_BUILD_STAGE ]]
+              if [[ !$SKIP_BUILD_STAGE ]]
               then
                   APP_VERSION="$DEFAULT_IMAGE_TAG"
               fi
