@@ -16,9 +16,7 @@ def computeTimestamp(RunWrapper build) {
 }
 
 def computeAppName(name, branch) {
-  println "the branch is ${branch}"
-  def nameSuffix = branch == "master" ? "" : "-${branch}"
-  println "the suffix is ${nameSuffix}"
+  def nameSuffix = branch == "master" ? "-" : "-${branch}"
   return name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
 }
 
