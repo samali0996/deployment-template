@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = 'master'
 SKIP_BUILD_STAGE = true
+DEFAULT_IMAGE_TAG = '20200525-212602-b9c6b3a-dev'
 
 def computeTimestamp(RunWrapper build) {
   def date = new Date(build.timeInMillis)
@@ -79,6 +80,8 @@ spec:
       value: ${helmChartName}
     - name: TIMESTAMP
       value: ${timestamp}
+    - name: DEFAULT_IMAGE_TAG
+      value ${DEFAULT_IMAGE_TAG}
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
@@ -129,6 +132,11 @@ spec:
               set -e +x
 
               APP_VERSION="$TIMESTAMP-$(git rev-parse --short HEAD)-$BRANCH"
+              if [[ $SKIP_BUILD_STAGE ]]
+              then
+                  APP_VERSION="$DEFAULT_IMAGE_TAG"
+              fi
+
               APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
               echo "APP_VERSION=$APP_VERSION" >> ./env-config
               echo "APP_IMAGE=$APP_IMAGE" >> ./env-config
