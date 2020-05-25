@@ -16,17 +16,19 @@ def computeTimestamp(RunWrapper build) {
 }
 
 def computeAppName(name, branch) {
-  println "the old name  is ${name}"
-  def nameSuffix = branch == "master" ? "-" : "-${branch}"
-  def newName = name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
-  println "the name im making is ${newName}"
+  def nameSuffix = branch == "master" ? "" : "-${branch}"
+  return name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
+}
+
+def computeHelmChartName(name) {
+  return name.toLowerCase().replaceAll("/${branch}", "")
 }
 
 
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
 def appName = computeAppName(env.JOB_NAME, branch)
-def helmChartName = computeAppName(env.JOB_NAME, "master")
+def helmChartName = computeHelmChartName(env.JOB_NAME)
 def timestamp = computeTimestamp(currentBuild)
 
 
