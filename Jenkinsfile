@@ -12,13 +12,14 @@
 def branch = env.BRANCH_NAME
 def appName = env.JOB_NAME.toLowerCase().replaceAll("/${branch}", "")
 def buildNumber = env.BUILD_NUMBER
+def timestamp = env.TAG_TIMESTAMP
 
 
 println"""
 App Name: ${appName}
 Branch: ${branch}
 Build Number: ${buildNumber}
-
+Timestamp: ${timestamp}
 """
 
 podTemplate(yaml:"""
@@ -144,7 +145,7 @@ spec:
               set -e
               . ./env-config
               helm version
-              helm upgrade $APP_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.tag=3ba9cf4-dev --namespace dev --atomic --cleanup-on-fail --timeout 30s
+              helm upgrade $APP_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 30s
             '''
           }
         }
