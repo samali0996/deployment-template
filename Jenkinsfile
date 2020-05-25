@@ -1,5 +1,3 @@
-// import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
-
 // def sanitize(name) {
 //   return name.replaceAll('[^\\p{IsAlphabetic}\\d]', '-')
 // }
@@ -9,6 +7,7 @@
 //   return sanitize(build.projectName.substring(i + 1)).toLowerCase()
 // }
 
+import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
 def computeTimestamp(RunWrapper build) {
