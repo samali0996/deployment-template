@@ -33,6 +33,9 @@ spec:
     volumeMounts:
     - name: home-volume
       mountPath: /home/jenkins
+    envFrom:
+      - configMapRef:
+          name: cr-config    
     env:
     - name: HOME
       value: /home/jenkins
