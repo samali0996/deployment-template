@@ -115,13 +115,11 @@ spec:
           }
         }
         container(name: 'buildah', shell: '/bin/bash') {
-          if (false) {
           stage('Build Image') {
             sh '''#!/bin/bash
                 set -e +x
                 . ./env-config
 
-                APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
                 echo "Building image $APP_IMAGE"
 
                 buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
@@ -136,14 +134,13 @@ spec:
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
           }
-          }
         }
         container(name: 'ibmcloud', shell: '/bin/bash') {
           stage ("Deploy to dev") {
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade $APP_NAME deployment/deployment-tools -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic --create-namespace --cleanup-on-fail
+              helm upgrade $APP_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail
             '''
           }
         }
