@@ -2,21 +2,12 @@
 
 replicaCount: 1
 
-image:
-  repository: us.icr.io/samskubetut/deployment-tools
-
 registry:
   imagePullSecretsName: container-registry
 
 service:
   type: NodePort
   targetPort: 3000
-
-livenessProbe:
-  path: /
-  initialDelaySeconds: 0
-readinessProbe:
-  path: /
 
 # Specified by the command-line (--set image.tag=<version>)
 #image:

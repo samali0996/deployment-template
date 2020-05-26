@@ -11,7 +11,7 @@ import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = 'master'
-IMAGE_TAG_OVERRIDE = ""
+IMAGE_TAG_OVERRIDE = "e26b888-dev"
 DOCKER_CONTEXT = "docker-apps/nodejs/."
 
 
@@ -156,8 +156,7 @@ spec:
                 sh '''#!/bin/bash
               set -e +x
               . ./env-config
-              pwd
-              ls
+
               if [[ $CR_USERNAME && $CR_PASSWORD ]]
               then
                 echo "Logging into registry $REGISTRY_URL"

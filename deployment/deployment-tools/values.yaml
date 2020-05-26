@@ -8,7 +8,8 @@ image:
   repository: us.icr.io/samskubetut/deployment-tools
   pullPolicy: Always
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: container-registry
 nameOverride: ""
 fullnameOverride: ""
 
@@ -69,6 +70,6 @@ affinity: {}
 
 livenessProbe:
   path: /
-  initialDelaySeconds: 0
+  initialDelaySeconds: 0 
 readinessProbe:
   path: /
