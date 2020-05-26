@@ -159,6 +159,8 @@ spec:
                 set -e +x
                 . ./env-config
 
+                podman 
+
                 if [[ $CR_USERNAME && $CR_PASSWORD ]]
                 then
                   echo "Logging into registry $REGISTRY_URL"
@@ -166,7 +168,7 @@ spec:
                 fi
 
                 echo "Attempt to pull existing image"
-                if buildah pull --tls-verify=false $REPOSITORY_URL:$APP_VERSION
+                if buildah search --tls-verify=false $REPOSITORY_URL:$APP_VERSION
                 then
                   echo "Image found, using existing image"
                 else
