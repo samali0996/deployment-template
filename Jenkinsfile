@@ -138,8 +138,8 @@ spec:
               then
                   APP_VERSION="$DEFAULT_IMAGE_TAG"
               fi
-              REPOSITORY_URL="${REGISTRY_URL}/${REGISTRY_NAMESPACE}"
-              APP_IMAGE="${REPOSITORY_URL}/${APP_NAME}:${APP_VERSION}"
+              REPOSITORY_URL="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}"
+              APP_IMAGE="${REPOSITORY_URL}:${APP_VERSION}"
 
               echo "REPOSITORY_URL=$REPOSITORY_URL" >> ./env-config
               echo "APP_VERSION=$APP_VERSION" >> ./env-config
