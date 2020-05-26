@@ -159,15 +159,18 @@ spec:
                 set -e +x
                 . ./env-config
 
-                echo "Building image $APP_IMAGE"
-
-                buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
-
                 if [[ $CR_USERNAME && $CR_PASSWORD ]]
                 then
                   echo "Logging into registry $REGISTRY_URL"
                   buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
                 fi
+
+                echo "Attempt to pull existing image"
+                buildah pull --tls-verify=false $REPOSITORY_URL:20200526-200248-f133230-dev
+
+                echo "Building image $APP_IMAGE"
+
+                buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
 
                 echo "Pushing image to the registry"
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
