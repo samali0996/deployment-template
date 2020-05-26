@@ -11,7 +11,7 @@ import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = 'master'
-SKIP_BUILD_STAGE = true
+SKIP_BUILD_STAGE = false
 DEFAULT_IMAGE_TAG = "20200525-234138-4cb9a52-dev"
 
 def computeTimestamp(RunWrapper build) {
