@@ -154,7 +154,8 @@ spec:
                 sh '''#!/bin/bash
               set -e +x
               . ./env-config
-
+              pwd
+              ls
               if [[ $CR_USERNAME && $CR_PASSWORD ]]
               then
                 echo "Logging into registry $REGISTRY_URL"
