@@ -135,7 +135,7 @@ spec:
 
               # APP_VERSION="${IMAGE_TAG_OVERRIDE:-$(git rev-parse --short HEAD)-$BRANCH}"
 
-              # APP_VERSION="${IMAGE_TAG_OVERRIDE:-didn't work}"
+              APP_VERSION="${IMAGE_TAG_OVERRIDE:-default value}"
 
               REPOSITORY_URL="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}"
               APP_IMAGE="${REPOSITORY_URL}:${APP_VERSION}"
