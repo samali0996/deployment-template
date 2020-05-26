@@ -166,7 +166,7 @@ spec:
                 fi
 
                 echo "Attempt to pull existing image"
-                buildah pull --tls-verify=false $REPOSITORY_URL:20200526-200248-f133230-dev
+                buildah pull --tls-verify=false $REPOSITORY_URL:20200526-200248-f1332dsa30-dev
 
                 echo "Building image $APP_IMAGE"
 
