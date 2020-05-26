@@ -42,7 +42,7 @@ Branch: ${branch}
 Build Number: ${buildNumber}
 Timestamp: ${timestamp}
 Helm Release Name: ${helmReleaseName}
-Image Tag Override = ${IMAGE_TAG_OVERRIDE}
+Image Tag Override: ${IMAGE_TAG_OVERRIDE}
 """
 
 podTemplate(yaml:"""
