@@ -138,8 +138,10 @@ spec:
               then
                   APP_VERSION="$DEFAULT_IMAGE_TAG"
               fi
+              REPOSITORY_URL="${REGISTRY_URL}/${REGISTRY_NAMESPACE}"
+              APP_IMAGE="${REPOSITORY_URL}/${APP_NAME}:${APP_VERSION}"
 
-              APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
+              echo "REPOSITORY_URL=$REPOSITORY_URL" >> ./env-config
               echo "APP_VERSION=$APP_VERSION" >> ./env-config
               echo "APP_IMAGE=$APP_IMAGE" >> ./env-config
               cat ./env-config
@@ -177,7 +179,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade $APP_NAME deployment/$HELM_CHART_NAME -f deployment/values_dev.yaml --install --set image.repository=$APP_IMAGE --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 45s
+              helm upgrade $APP_NAME deployment/$HELM_CHART_NAME -f deployment/values_dev.yaml --install --set image.repository=$REPOSITORY_URL --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 45s
             '''
           }
         }
