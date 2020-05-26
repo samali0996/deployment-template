@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  repository: us.icr.io/samskubetut/deployment-tools-dev
+  repository: us.icr.io/samskubetut/deployment-tools
 
 registry:
   imagePullSecretsName: container-registry
