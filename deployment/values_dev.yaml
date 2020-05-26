@@ -13,9 +13,9 @@ service:
   targetPort: 3000
 
 livenessProbe:
-  path: /sample
+  path: /
 readinessProbe:
-  path: /sample
+  path: /
 
 # Specified by the command-line (--set image.tag=<version>)
 #image:
