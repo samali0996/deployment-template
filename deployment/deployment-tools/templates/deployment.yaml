@@ -30,6 +30,7 @@ spec:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
               port: http
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path }}
