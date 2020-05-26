@@ -10,13 +10,17 @@
 import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
+DEFAULT_BRANCH = 'master'
+SKIP_BUILD_STAGE = true
+DEFAULT_IMAGE_TAG = "20200525-234138-4cb9a52-dev"
+
 def computeTimestamp(RunWrapper build) {
   def date = new Date(build.timeInMillis)
   return new SimpleDateFormat('yyyyMMdd-HHmmss').format(date)
 }
 
 def computeAppName(name, branch) {
-  def nameSuffix = branch == "master" ? "" : "-${branch}"
+  def nameSuffix = branch == DEFAULT_BRANCH ? "" : "-${branch}"
   return name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
 }
 
@@ -38,6 +42,8 @@ Branch: ${branch}
 Build Number: ${buildNumber}
 Timestamp: ${timestamp}
 Helm Chart Name: ${helmChartName}
+Skip Build Stage = ${SKIP_BUILD_STAGE}
+Default Image Tag = ${DEFAULT_IMAGE_TAG}
 """
 
 podTemplate(yaml:"""
@@ -76,6 +82,8 @@ spec:
       value: ${helmChartName}
     - name: TIMESTAMP
       value: ${timestamp}
+    - name: DEFAULT_IMAGE_TAG
+      value: ${DEFAULT_IMAGE_TAG}
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
@@ -126,6 +134,11 @@ spec:
               set -e +x
 
               APP_VERSION="$TIMESTAMP-$(git rev-parse --short HEAD)-$BRANCH"
+              if [[ !$SKIP_BUILD_STAGE ]]
+              then
+                  APP_VERSION="$DEFAULT_IMAGE_TAG"
+              fi
+
               APP_IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}:${APP_VERSION}"
               echo "APP_VERSION=$APP_VERSION" >> ./env-config
               echo "APP_IMAGE=$APP_IMAGE" >> ./env-config
@@ -138,8 +151,8 @@ spec:
           }
         }
         container(name: 'buildah', shell: '/bin/bash') {
-          if (true){
           stage('Build Image') {
+          if (!SKIP_BUILD_STAGE){
             sh '''#!/bin/bash
                 set -e +x
                 . ./env-config
@@ -157,14 +170,13 @@ spec:
                 echo "Pushing image to the registry"
                 buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
                 '''
-          }
-        }}
+          }}
+        }
         container(name: 'ibmcloud', shell: '/bin/bash') {
           stage ("Deploy to dev") {
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              # APP_VERSION=20200525-212602-b9c6b3a-dev
               helm upgrade $APP_NAME deployment/$HELM_CHART_NAME -f deployment/values_dev.yaml --install --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 45s
             '''
           }
