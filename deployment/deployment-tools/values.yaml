@@ -69,5 +69,6 @@ affinity: {}
 
 livenessProbe:
   path: /
+  initialDelaySeconds: 0
 readinessProbe:
   path: /
