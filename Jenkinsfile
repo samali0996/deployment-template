@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = 'master'
 SKIP_BUILD_STAGE = false
-DEFAULT_IMAGE_TAG = "20200525-234138-4cb9a52-dev"
+IMAGE_TAG_OVERRIDE = "20200525-234138-4cb9a52-dev"
 
 def computeTimestamp(RunWrapper build) {
   def date = new Date(build.timeInMillis)
@@ -43,7 +43,7 @@ Build Number: ${buildNumber}
 Timestamp: ${timestamp}
 Helm Release Name: ${helmReleaseName}
 Skip Build Stage = ${SKIP_BUILD_STAGE}
-Default Image Tag = ${DEFAULT_IMAGE_TAG}
+Default Image Tag = ${IMAGE_TAG_OVERRIDE}
 """
 
 podTemplate(yaml:"""
@@ -80,8 +80,8 @@ spec:
       value: ${appName}
     - name: HELM_RELEASE_NAME
       value: ${helmReleaseName}
-    - name: DEFAULT_IMAGE_TAG
-      value: ${DEFAULT_IMAGE_TAG}
+    - name: IMAGE_TAG_OVERRIDE
+      value: ${IMAGE_TAG_OVERRIDE}
     - name: SKIP_BUILD_STAGE
       value: ${SKIP_BUILD_STAGE}
   - name: buildah
@@ -133,11 +133,10 @@ spec:
               sh'''#!/bin/bash
               set -e +x
 
-              APP_VERSION="$(git rev-parse --short HEAD)-$BRANCH"
-              if $SKIP_BUILD_STAGE
-              then
-                  APP_VERSION="$DEFAULT_IMAGE_TAG"
-              fi
+              # APP_VERSION="${IMAGE_TAG_OVERRIDE:-$(git rev-parse --short HEAD)-$BRANCH}"
+
+              APP_VERSION="${IMAGE_TAG_OVERRIDE:-didn't work}"
+
               REPOSITORY_URL="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}"
               APP_IMAGE="${REPOSITORY_URL}:${APP_VERSION}"
 
@@ -153,45 +152,43 @@ spec:
           }
         }
         stage('Build Image') {
-          if (!SKIP_BUILD_STAGE){
-            try {
-              container(name: 'buildah', shell: '/bin/bash') {
-                 sh '''#!/bin/bash
-                set -e +x
-                . ./env-config
-
-                if [[ $CR_USERNAME && $CR_PASSWORD ]]
-                then
-                  echo "Logging into registry $REGISTRY_URL"
-                  buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
-                fi
-
-                echo "Attempt to pull existing image"
-
-                buildah pull --tls-verify=false $REPOSITORY_URL:$APP_VERSION
-                '''
-              }
-            }
-            catch (exception) {
-              container(name: 'buildah', shell: '/bin/bash') {
+          try {
+            container(name: 'buildah', shell: '/bin/bash') {
                 sh '''#!/bin/bash
-                set -e +x
-                . ./env-config
+              set -e +x
+              . ./env-config
 
-                if [[ $CR_USERNAME && $CR_PASSWORD ]]
-                then
-                  echo "Logging into registry $REGISTRY_URL"
-                  buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
-                fi
+              if [[ $CR_USERNAME && $CR_PASSWORD ]]
+              then
+                echo "Logging into registry $REGISTRY_URL"
+                buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
+              fi
 
-                echo "Building image $APP_IMAGE"
+              echo "Attempt to pull existing image"
 
-                buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
+              buildah pull --tls-verify=false $REPOSITORY_URL:$APP_VERSION
+              '''
+            }
+          }
+          catch (exception) {
+            container(name: 'buildah', shell: '/bin/bash') {
+              sh '''#!/bin/bash
+              set -e +x
+              . ./env-config
 
-                echo "Pushing image to the registry"
-                buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
-                '''
-              }
+              if [[ $CR_USERNAME && $CR_PASSWORD ]]
+              then
+                echo "Logging into registry $REGISTRY_URL"
+                buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
+              fi
+
+              echo "Building image $APP_IMAGE"
+
+              buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
+
+              echo "Pushing image to the registry"
+              buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
+              '''
             }
           }    
         }
