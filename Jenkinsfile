@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat
 DEFAULT_BRANCH = 'master'
 // IMAGE_TAG_OVERRIDE = "20200525-234138-4cb9a52-dev"
 IMAGE_TAG_OVERRIDE = ""
+DOCKER_CONTEXT = "dockerapps/nodejs/."
+
 
 def computeTimestamp(RunWrapper build) {
   def date = new Date(build.timeInMillis)
@@ -28,7 +30,7 @@ def computeAppName(name, branch) {
   return name.toLowerCase().replaceAll("/${branch}", "")
 }
 
-
+def dockerfile = "${DOCKER_CONTEXT}/Dockerfile"
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
 def helmReleaseName = computeHelmReleaseName(env.JOB_NAME, branch)
@@ -109,9 +111,9 @@ spec:
     - name: APP_NAME
       value: ${appName}
     - name: DOCKERFILE
-      value: ./Dockerfile
+      value: ${dockerfile}
     - name: CONTEXT
-      value: .
+      value: ${DOCKER_CONTEXT}
     - name: TLS_VERIFY
       value: "false"
   volumes:
