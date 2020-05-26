@@ -166,14 +166,17 @@ spec:
                 fi
 
                 echo "Attempt to pull existing image"
-                buildah pull --tls-verify=false $REPOSITORY_URL:20200526-200248-f1332dsa30-dev
+                if buildah pull --tls-verify=false $REPOSITORY_URL:$APP_VERSION
+                then
+                  echo "Image found, using existing image"
+                else
+                  echo "Building image $APP_IMAGE"
 
-                echo "Building image $APP_IMAGE"
+                  buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
 
-                buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
-
-                echo "Pushing image to the registry"
-                buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
+                  echo "Pushing image to the registry"
+                  buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
+                fi
                 '''
           }}
         }
