@@ -152,10 +152,11 @@ spec:
               '''
           }
         }
-        container(name: 'buildah', shell: '/bin/bash') {
-          stage('Build Image') {
+        stage('Build Image') {
           if (!SKIP_BUILD_STAGE){
-            sh '''#!/bin/bash
+            try {
+              container(name: 'buildah', shell: '/bin/bash') {
+                 sh '''#!/bin/bash
                 set -e +x
                 . ./env-config
 
@@ -166,19 +167,33 @@ spec:
                 fi
 
                 echo "Attempt to pull existing image"
-                if buildah search --tls-verify=false $REPOSITORY_URL:$APP_VERSION
-                then
-                  echo "Image found, using existing image"
-                else
-                  echo "Building image $APP_IMAGE"
 
-                  buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
-
-                  echo "Pushing image to the registry"
-                  buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
-                fi
+                buildah pull --tls-verify=false $REPOSITORY_URL:$APP_VERSION
                 '''
-          }}
+              }
+            }
+            catch (exception) {
+              container(name: 'buildah', shell: '/bin/bash') {
+                sh '''#!/bin/bash
+                set -e +x
+                . ./env-config
+
+                if [[ $CR_USERNAME && $CR_PASSWORD ]]
+                then
+                  echo "Logging into registry $REGISTRY_URL"
+                  buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
+                fi
+
+                echo "Building image $APP_IMAGE"
+
+                buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
+
+                echo "Pushing image to the registry"
+                buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
+                '''
+              }
+            }
+          }    
         }
         container(name: 'ibmcloud', shell: '/bin/bash') {
           stage ("Deploy to dev") {
