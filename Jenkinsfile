@@ -134,9 +134,7 @@ spec:
               sh'''#!/bin/bash
               set -e +x
 
-              # APP_VERSION="${IMAGE_TAG_OVERRIDE:-$(git rev-parse --short HEAD)-$BRANCH}"
-
-              APP_VERSION="${IMAGE_TAG_OVERRIDE:-default value}"
+              APP_VERSION="${IMAGE_TAG_OVERRIDE:-$(git rev-parse --short HEAD)-$BRANCH}"
 
               REPOSITORY_URL="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}"
               APP_IMAGE="${REPOSITORY_URL}:${APP_VERSION}"
