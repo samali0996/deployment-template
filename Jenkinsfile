@@ -19,20 +19,20 @@ def computeTimestamp(RunWrapper build) {
   return new SimpleDateFormat('yyyyMMdd-HHmmss').format(date)
 }
 
-def computeAppName(name, branch) {
+def computeHelmReleaseName(name, branch) {
   def nameSuffix = branch == DEFAULT_BRANCH ? "" : "-${branch}"
   return name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
 }
 
-def computeHelmChartName(name, branch) {
+def computeAppName(name, branch) {
   return name.toLowerCase().replaceAll("/${branch}", "")
 }
 
 
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
+def helmReleaseName = computeHelmReleaseName(env.JOB_NAME, branch)
 def appName = computeAppName(env.JOB_NAME, branch)
-def helmChartName = computeHelmChartName(env.JOB_NAME, branch)
 def timestamp = computeTimestamp(currentBuild)
 
 
@@ -41,7 +41,7 @@ App Name: ${appName}
 Branch: ${branch}
 Build Number: ${buildNumber}
 Timestamp: ${timestamp}
-Helm Chart Name: ${helmChartName}
+Helm Release Name: ${helmReleaseName}
 Skip Build Stage = ${SKIP_BUILD_STAGE}
 Default Image Tag = ${DEFAULT_IMAGE_TAG}
 """
@@ -78,8 +78,8 @@ spec:
       value: ${branch}
     - name: APP_NAME
       value: ${appName}
-    - name: HELM_CHART_NAME
-      value: ${helmChartName}
+    - name: HELM_RELEASE_NAME
+      value: ${helmReleaseName}
     - name: TIMESTAMP
       value: ${timestamp}
     - name: DEFAULT_IMAGE_TAG
@@ -181,7 +181,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade $APP_NAME deployment/$HELM_CHART_NAME -f deployment/values_dev.yaml --install --set image.repository=$REPOSITORY_URL --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 45s
+              helm upgrade $HELM_RELEASE_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.repository=$REPOSITORY_URL --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 45s
             '''
           }
         }
