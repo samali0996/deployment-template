@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 DEFAULT_BRANCH = 'master'
 // IMAGE_TAG_OVERRIDE = "20200525-234138-4cb9a52-dev"
 IMAGE_TAG_OVERRIDE = ""
-DOCKER_CONTEXT = "dockerapps/nodejs/."
+DOCKER_CONTEXT = "dockerapps/deployment-image/."
 
 
 def computeTimestamp(RunWrapper build) {
