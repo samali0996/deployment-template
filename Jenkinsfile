@@ -11,9 +11,8 @@ import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = 'master'
-// IMAGE_TAG_OVERRIDE = "20200525-234138-4cb9a52-dev"
 IMAGE_TAG_OVERRIDE = ""
-DOCKER_CONTEXT = "docker-apps/deployment-image/."
+DOCKER_CONTEXT = "docker-apps/nodejs/."
 
 
 def computeTimestamp(RunWrapper build) {
@@ -30,6 +29,8 @@ def computeAppName(name, branch) {
   return name.toLowerCase().replaceAll("/${branch}", "")
 }
 
+
+def dockerContext = DOCKER_CONTEXT ? DOCKER_CONTEXT : "."
 def dockerfile = "${DOCKER_CONTEXT}/Dockerfile"
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
@@ -45,6 +46,7 @@ Build Number: ${buildNumber}
 Timestamp: ${timestamp}
 Helm Release Name: ${helmReleaseName}
 Image Tag Override: ${IMAGE_TAG_OVERRIDE}
+Docker Context: ${dockerContext}
 """
 
 podTemplate(yaml:"""
@@ -113,7 +115,7 @@ spec:
     - name: DOCKERFILE
       value: ${dockerfile}
     - name: CONTEXT
-      value: ${DOCKER_CONTEXT}
+      value: ${dockerContext}
     - name: TLS_VERIFY
       value: "false"
   volumes:
