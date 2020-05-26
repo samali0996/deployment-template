@@ -2,3 +2,4 @@ node_modules/
 .vscode/
 secrets/
 venv/
+__pycache__/
