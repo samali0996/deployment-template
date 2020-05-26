@@ -159,8 +159,6 @@ spec:
                 set -e +x
                 . ./env-config
 
-                podman 
-
                 if [[ $CR_USERNAME && $CR_PASSWORD ]]
                 then
                   echo "Logging into registry $REGISTRY_URL"
