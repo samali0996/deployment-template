@@ -80,8 +80,6 @@ spec:
       value: ${appName}
     - name: HELM_RELEASE_NAME
       value: ${helmReleaseName}
-    - name: TIMESTAMP
-      value: ${timestamp}
     - name: DEFAULT_IMAGE_TAG
       value: ${DEFAULT_IMAGE_TAG}
     - name: SKIP_BUILD_STAGE
@@ -135,7 +133,7 @@ spec:
               sh'''#!/bin/bash
               set -e +x
 
-              APP_VERSION="$TIMESTAMP-$(git rev-parse --short HEAD)-$BRANCH"
+              APP_VERSION="$(git rev-parse --short HEAD)-$BRANCH"
               if $SKIP_BUILD_STAGE
               then
                   APP_VERSION="$DEFAULT_IMAGE_TAG"
