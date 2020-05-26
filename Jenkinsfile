@@ -43,7 +43,7 @@ Build Number: ${buildNumber}
 Timestamp: ${timestamp}
 Helm Release Name: ${helmReleaseName}
 Skip Build Stage = ${SKIP_BUILD_STAGE}
-Default Image Tag = ${IMAGE_TAG_OVERRIDE}
+Image Tag Override = ${IMAGE_TAG_OVERRIDE}
 """
 
 podTemplate(yaml:"""
@@ -135,7 +135,7 @@ spec:
 
               # APP_VERSION="${IMAGE_TAG_OVERRIDE:-$(git rev-parse --short HEAD)-$BRANCH}"
 
-              APP_VERSION="${IMAGE_TAG_OVERRIDE:-didn't work}"
+              # APP_VERSION="${IMAGE_TAG_OVERRIDE:-didn't work}"
 
               REPOSITORY_URL="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}"
               APP_IMAGE="${REPOSITORY_URL}:${APP_VERSION}"
