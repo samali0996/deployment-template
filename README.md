@@ -33,7 +33,7 @@ helm install jenkins stable/jenkins -f values.yaml --namespace jenkins
 
 ### Redeploy
 ```
-helm upgrade -f jenkins/values.yaml jenkins stable/jenkins --namespace jenkins
+helm upgrade jenkins stable/jenkins -f values.yaml  --atomic --timeout 1m45s --install --namespace jenkins
 ```
 
 ## Set up Secrets and Config
@@ -68,4 +68,11 @@ kubectl apply -f dashboard-adminuser.yaml
 
 ```
 k --namespace dev create secret docker-registry container-registry --docker-server=us.icr.io --docker-username=iamapikey --docker-password=<apikey> --docker-email=a@b.c
+```
+
+## Copy secret from one namespace to another
+
+```
+kubectl get secret <secret_name> --namespace=default --export -o yaml |\
+   kubectl apply --namespace=<new_namespace> -f - 
 ```

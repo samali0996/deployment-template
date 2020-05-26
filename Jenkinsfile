@@ -11,28 +11,28 @@ import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = 'master'
-SKIP_BUILD_STAGE = true
-DEFAULT_IMAGE_TAG = "20200525-231531-b74d681-master"
+SKIP_BUILD_STAGE = false
+DEFAULT_IMAGE_TAG = "20200525-234138-4cb9a52-dev"
 
 def computeTimestamp(RunWrapper build) {
   def date = new Date(build.timeInMillis)
   return new SimpleDateFormat('yyyyMMdd-HHmmss').format(date)
 }
 
-def computeAppName(name, branch) {
+def computeHelmReleaseName(name, branch) {
   def nameSuffix = branch == DEFAULT_BRANCH ? "" : "-${branch}"
   return name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
 }
 
-def computeHelmChartName(name, branch) {
+def computeAppName(name, branch) {
   return name.toLowerCase().replaceAll("/${branch}", "")
 }
 
 
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
+def helmReleaseName = computeHelmReleaseName(env.JOB_NAME, branch)
 def appName = computeAppName(env.JOB_NAME, branch)
-def helmChartName = computeHelmChartName(env.JOB_NAME, branch)
 def timestamp = computeTimestamp(currentBuild)
 
 
@@ -41,7 +41,7 @@ App Name: ${appName}
 Branch: ${branch}
 Build Number: ${buildNumber}
 Timestamp: ${timestamp}
-Helm Chart Name: ${helmChartName}
+Helm Release Name: ${helmReleaseName}
 Skip Build Stage = ${SKIP_BUILD_STAGE}
 Default Image Tag = ${DEFAULT_IMAGE_TAG}
 """
@@ -78,12 +78,14 @@ spec:
       value: ${branch}
     - name: APP_NAME
       value: ${appName}
-    - name: HELM_CHART_NAME
-      value: ${helmChartName}
+    - name: HELM_RELEASE_NAME
+      value: ${helmReleaseName}
     - name: TIMESTAMP
       value: ${timestamp}
     - name: DEFAULT_IMAGE_TAG
       value: ${DEFAULT_IMAGE_TAG}
+    - name: SKIP_BUILD_STAGE
+      value: ${SKIP_BUILD_STAGE}
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
@@ -134,7 +136,7 @@ spec:
               set -e +x
 
               APP_VERSION="$TIMESTAMP-$(git rev-parse --short HEAD)-$BRANCH"
-              if [[ !$SKIP_BUILD_STAGE ]]
+              if $SKIP_BUILD_STAGE
               then
                   APP_VERSION="$DEFAULT_IMAGE_TAG"
               fi
@@ -179,7 +181,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade $APP_NAME deployment/$HELM_CHART_NAME -f deployment/values_dev.yaml --install --set image.repository=$REPOSITORY_URL --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 45s
+              helm upgrade $HELM_RELEASE_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.repository=$REPOSITORY_URL --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 45s
             '''
           }
         }

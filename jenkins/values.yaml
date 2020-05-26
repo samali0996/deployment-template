@@ -1,6 +1,11 @@
 master:
   ingress:
-  # add tls, try to enforce tls
+    annotations:
+      ingress.bluemix.net/redirect-to-https: "True"  
+    tls:
+    - hosts:
+      - jenkins.<hostname>
+      secretName: <ingress_secret>
     enabled: true
     hostName: jenkins.<hostname>
   installPlugins:
