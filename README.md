@@ -73,6 +73,6 @@ k --namespace dev create secret docker-registry container-registry --docker-serv
 ## Copy secret from one namespace to another
 
 ```
-kubectl get secret <secret_name> --namespace=default --export -o yaml |\                      !10061
+kubectl get secret <secret_name> --namespace=default --export -o yaml |\
    kubectl apply --namespace=<new_namespace> -f - 
 ```
