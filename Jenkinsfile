@@ -12,7 +12,8 @@ import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = 'master'
 SKIP_BUILD_STAGE = false
-IMAGE_TAG_OVERRIDE = "20200525-234138-4cb9a52-dev"
+// IMAGE_TAG_OVERRIDE = "20200525-234138-4cb9a52-dev"
+IMAGE_TAG_OVERRIDE = ""
 
 def computeTimestamp(RunWrapper build) {
   def date = new Date(build.timeInMillis)
