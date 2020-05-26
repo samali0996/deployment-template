@@ -11,7 +11,6 @@ import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = 'master'
-SKIP_BUILD_STAGE = false
 // IMAGE_TAG_OVERRIDE = "20200525-234138-4cb9a52-dev"
 IMAGE_TAG_OVERRIDE = ""
 
@@ -43,7 +42,6 @@ Branch: ${branch}
 Build Number: ${buildNumber}
 Timestamp: ${timestamp}
 Helm Release Name: ${helmReleaseName}
-Skip Build Stage = ${SKIP_BUILD_STAGE}
 Image Tag Override = ${IMAGE_TAG_OVERRIDE}
 """
 
@@ -83,8 +81,6 @@ spec:
       value: ${helmReleaseName}
     - name: IMAGE_TAG_OVERRIDE
       value: ${IMAGE_TAG_OVERRIDE}
-    - name: SKIP_BUILD_STAGE
-      value: ${SKIP_BUILD_STAGE}
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
