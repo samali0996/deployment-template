@@ -33,7 +33,7 @@ helm install jenkins stable/jenkins -f values.yaml --namespace jenkins
 
 ### Redeploy
 ```
-helm upgrade -f jenkins/values.yaml jenkins stable/jenkins --namespace jenkins
+helm upgrade jenkins stable/jenkins -f values.yaml  --atomic --timeout 1m45s --install --namespace jenkins
 ```
 
 ## Set up Secrets and Config
