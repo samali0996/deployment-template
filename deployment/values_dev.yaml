@@ -12,6 +12,11 @@ service:
   type: NodePort
   targetPort: 3000
 
+livenessProbe:
+  path: /sample
+readinessProbe:
+  path: /sample
+
 # Specified by the command-line (--set image.tag=<version>)
 #image:
 #  tag: 2
