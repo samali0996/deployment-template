@@ -4,6 +4,6 @@ metadata:
   namespace: dev
   name: deploy-permissions
 rules:
-- apiGroups: ["", "apps"] # "" indicates the core API group
-  resources: ["secrets", "services", "deployments", "replicasets"]
-  verbs: ["get", "watch", "list", "create"]
+- apiGroups: ["", "batch", "extensions", "apps"] # "" indicates the core API group
+  resources: ["*"]
+  verbs: ["*"]
