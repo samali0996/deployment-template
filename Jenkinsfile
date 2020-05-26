@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = 'master'
 SKIP_BUILD_STAGE = true
-DEFAULT_IMAGE_TAG = "20200525-234138-4cb9a52-dev"
+DEFAULT_IMAGE_TAG = "20200525-231531-b74d681-master"
 
 def computeTimestamp(RunWrapper build) {
   def date = new Date(build.timeInMillis)
