@@ -2,9 +2,9 @@ import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = "master"
-IMAGE_TAG_OVERRIDE = "dc96816-dev"
-DOCKER_CONTEXT = "docker-apps/springboot/."
-HELM_RELEASE_NAME_OVERRIDE = ""
+IMAGE_TAG_OVERRIDE = ""
+DOCKER_CONTEXT = "docker-apps/nodejs/."
+HELM_RELEASE_NAME_OVERRIDE = "nodeapp-1"
 
 
 def computeTimestamp(RunWrapper build) {
@@ -26,7 +26,7 @@ def dockerContext = DOCKER_CONTEXT ? DOCKER_CONTEXT : "."
 def dockerfile = "${DOCKER_CONTEXT}/Dockerfile"
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
-def helmReleaseName = computeHelmReleaseName(env.JOB_NAME, branch)
+def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? HELM_RELEASE_NAME_OVERRIDE : computeHelmReleaseName(env.JOB_NAME, branch)
 def appName = computeAppName(env.JOB_NAME, branch)
 def timestamp = computeTimestamp(currentBuild)
 
