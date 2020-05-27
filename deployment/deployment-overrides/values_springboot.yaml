@@ -1,0 +1,22 @@
+# Helm chart values override for dev
+
+replicaCount: 2 
+
+# registry:
+#   imagePullSecretsName: container-registry
+
+service:
+#   type: NodePort
+  port: 8080
+containerPort: 8080
+
+livenessProbe:
+  path: /sample
+readinessProbe:
+  path: /sample
+
+# healthCheck: false
+
+# Specified by the command-line (--set image.tag=<version>)
+#image:
+#  tag: 2
