@@ -3,9 +3,9 @@ import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = "master"
 IMAGE_TAG_OVERRIDE = ""
-DOCKER_CONTEXT_OVERRIDE = ""
+DOCKER_CONTEXT_OVERRIDE = "docker-apps/springboot/."
 //TODO: Change to and use as app name override
-HELM_RELEASE_NAME_OVERRIDE = ""
+HELM_RELEASE_NAME_OVERRIDE = "springboot"
 
 
 def computeTimestamp(RunWrapper build) {
