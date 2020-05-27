@@ -1,9 +1,9 @@
 import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
-DEFAULT_BRANCH = 'master'
-IMAGE_TAG_OVERRIDE = "dc96816-dev"
-DOCKER_CONTEXT = "docker-apps/python-flask/."
+DEFAULT_BRANCH = "master"
+IMAGE_TAG_OVERRIDE = ""
+DOCKER_CONTEXT = "docker-apps/springboot/."
 
 
 def computeTimestamp(RunWrapper build) {

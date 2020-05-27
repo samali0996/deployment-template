@@ -68,6 +68,7 @@ tolerations: []
 
 affinity: {}
 
+healthCheck: true
 
 livenessProbe:
   path: /
