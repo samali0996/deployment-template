@@ -189,7 +189,10 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade $HELM_RELEASE_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --set image.repository=$REPOSITORY_URL --set image.tag=$APP_VERSION --namespace dev --atomic --cleanup-on-fail --timeout 45s
+              helm upgrade $HELM_RELEASE_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --namespace dev --atomic --cleanup-on-fail --timeout 45s \
+                --set image.repository=$REPOSITORY_URL \ 
+                --set image.tag=$APP_VERSION \
+                --set fullnameOverride=$APP_NAME
             '''
           }
         }
