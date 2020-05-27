@@ -5,7 +5,7 @@ DEFAULT_BRANCH = "master"
 IMAGE_TAG_OVERRIDE = "c2129be-dev"
 DOCKER_CONTEXT = "docker-apps/springboot/."
 //TODO: Change to and use as app name override
-HELM_RELEASE_NAME_OVERRIDE = "springboot-app"
+HELM_RELEASE_NAME_OVERRIDE = ""
 
 
 def computeTimestamp(RunWrapper build) {
@@ -192,7 +192,7 @@ spec:
               helm upgrade $HELM_RELEASE_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --namespace dev --atomic --cleanup-on-fail --timeout 45s \\
                 --set image.repository=$REPOSITORY_URL \\
                 --set image.tag=$APP_VERSION \\
-                --set fullnameOverride=$APP_NAME
+                --set fullnameOverride=$HELM_RELEASE_NAME
             '''
           }
         }
