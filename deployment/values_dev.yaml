@@ -10,7 +10,7 @@ registry:
 #   targetPort: 5000
 # containerPort: 5000
 
-healthCheck: true
+healthCheck: false
 livenessProbe:
   path: /sample
 readinessProbe:
