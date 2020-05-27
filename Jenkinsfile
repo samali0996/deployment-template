@@ -2,8 +2,8 @@ import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = "master"
-IMAGE_TAG_OVERRIDE = "c2129be-dev"
-DOCKER_CONTEXT = "docker-apps/springboot/."
+IMAGE_TAG_OVERRIDE = ""
+DOCKER_CONTEXT_OVERRIDE = ""
 //TODO: Change to and use as app name override
 HELM_RELEASE_NAME_OVERRIDE = ""
 
@@ -23,8 +23,8 @@ def computeAppName(name, branch) {
 }
 
 def helmChartPath = "deployment/deployment-tools"
-def dockerContext = DOCKER_CONTEXT ? DOCKER_CONTEXT : "."
-def dockerfile = "${DOCKER_CONTEXT}/Dockerfile"
+def dockerContext = DOCKER_CONTEXT_OVERRIDE ? DOCKER_CONTEXT_OVERRIDE : "."
+def dockerfile = "${dockerContext}/Dockerfile"
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
 def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? computeHelmReleaseName(HELM_RELEASE_NAME_OVERRIDE, branch) : computeHelmReleaseName(env.JOB_NAME, branch)
@@ -43,8 +43,6 @@ Docker Context: ${dockerContext}
 """
 
 podTemplate(yaml:"""
-metadata:
-  namespace: jenkins
 spec:
   containers:
   - name: ibmcloud
@@ -194,7 +192,7 @@ spec:
               helm upgrade $HELM_RELEASE_NAME $HELM_CHART_PATH -f deployment/values_dev.yaml --install --namespace dev --atomic --cleanup-on-fail --timeout 45s \\
                 --set image.repository=$REPOSITORY_URL \\
                 --set image.tag=$APP_VERSION \\
-                --set fullnameOverride=$HELM_RELEASE_NAME
+                --set nameOverride=$HELM_RELEASE_NAME
             '''
           }
         }
