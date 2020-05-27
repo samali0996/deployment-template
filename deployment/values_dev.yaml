@@ -11,7 +11,7 @@ service:
   port: 5000
 containerPort: 5000
 
-healthCheck: false
+healthCheck: true
 
 # Specified by the command-line (--set image.tag=<version>)
 #image:
