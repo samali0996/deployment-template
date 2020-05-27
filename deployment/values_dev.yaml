@@ -5,12 +5,16 @@ replicaCount: 1
 registry:
   imagePullSecretsName: container-registry
 
-service:
-  type: NodePort
-  targetPort: 5000
-containerPort: 5000
+# service:
+#   type: NodePort
+#   targetPort: 5000
+# containerPort: 5000
 
 healthCheck: true
+livenessProbe:
+  path: /sample
+readinessProbe:
+  path: /sample
 
 # Specified by the command-line (--set image.tag=<version>)
 #image:
