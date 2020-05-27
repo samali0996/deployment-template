@@ -34,8 +34,8 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
-  port: 8080
+  type: NodePort
+  port: 80
   targetPort: 8080
 containerPort: 8080
 
