@@ -1,6 +1,6 @@
 # Helm chart values override for dev
 
-replicaCount: 1
+replicaCount: 2
 
 registry:
   imagePullSecretsName: container-registry
