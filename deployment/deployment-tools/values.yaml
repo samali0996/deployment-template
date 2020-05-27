@@ -8,7 +8,8 @@ image:
   repository: us.icr.io/samskubetut/deployment-tools
   pullPolicy: Always
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: container-registry
 nameOverride: ""
 fullnameOverride: ""
 
@@ -34,7 +35,8 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 3000
+containerPort: 3000
 
 ingress:
   enabled: false
@@ -67,8 +69,10 @@ tolerations: []
 
 affinity: {}
 
+healthCheck: true
+
 livenessProbe:
   path: /
-  initialDelaySeconds: 0
+  initialDelaySeconds: 0 
 readinessProbe:
   path: /

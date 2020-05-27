@@ -1,18 +1,12 @@
-// def sanitize(name) {
-//   return name.replaceAll('[^\\p{IsAlphabetic}\\d]', '-')
-// }
-
-// def computeAppName(RunWrapper build) {
-//   def i = build.projectName.indexOf('.')
-//   return sanitize(build.projectName.substring(i + 1)).toLowerCase()
-// }
-
 import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
-DEFAULT_BRANCH = 'master'
-SKIP_BUILD_STAGE = false
-DEFAULT_IMAGE_TAG = "20200525-234138-4cb9a52-dev"
+DEFAULT_BRANCH = "master"
+IMAGE_TAG_OVERRIDE = "c2129be-dev"
+DOCKER_CONTEXT = "docker-apps/springboot/."
+//TODO: Change to and use as app name override
+HELM_RELEASE_NAME_OVERRIDE = "springboot-app"
+
 
 def computeTimestamp(RunWrapper build) {
   def date = new Date(build.timeInMillis)
@@ -29,9 +23,11 @@ def computeAppName(name, branch) {
 }
 
 
+def dockerContext = DOCKER_CONTEXT ? DOCKER_CONTEXT : "."
+def dockerfile = "${DOCKER_CONTEXT}/Dockerfile"
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
-def helmReleaseName = computeHelmReleaseName(env.JOB_NAME, branch)
+def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? HELM_RELEASE_NAME_OVERRIDE : computeHelmReleaseName(env.JOB_NAME, branch)
 def appName = computeAppName(env.JOB_NAME, branch)
 def timestamp = computeTimestamp(currentBuild)
 
@@ -42,8 +38,8 @@ Branch: ${branch}
 Build Number: ${buildNumber}
 Timestamp: ${timestamp}
 Helm Release Name: ${helmReleaseName}
-Skip Build Stage = ${SKIP_BUILD_STAGE}
-Default Image Tag = ${DEFAULT_IMAGE_TAG}
+Image Tag Override: ${IMAGE_TAG_OVERRIDE}
+Docker Context: ${dockerContext}
 """
 
 podTemplate(yaml:"""
@@ -80,12 +76,8 @@ spec:
       value: ${appName}
     - name: HELM_RELEASE_NAME
       value: ${helmReleaseName}
-    - name: TIMESTAMP
-      value: ${timestamp}
-    - name: DEFAULT_IMAGE_TAG
-      value: ${DEFAULT_IMAGE_TAG}
-    - name: SKIP_BUILD_STAGE
-      value: ${SKIP_BUILD_STAGE}
+    - name: IMAGE_TAG_OVERRIDE
+      value: ${IMAGE_TAG_OVERRIDE}
   - name: buildah
     image: quay.io/buildah/stable:v1.14.8
     command: ["/bin/bash"]
@@ -114,9 +106,9 @@ spec:
     - name: APP_NAME
       value: ${appName}
     - name: DOCKERFILE
-      value: ./Dockerfile
+      value: ${dockerfile}
     - name: CONTEXT
-      value: .
+      value: ${dockerContext}
     - name: TLS_VERIFY
       value: "false"
   volumes:
@@ -135,11 +127,8 @@ spec:
               sh'''#!/bin/bash
               set -e +x
 
-              APP_VERSION="$TIMESTAMP-$(git rev-parse --short HEAD)-$BRANCH"
-              if $SKIP_BUILD_STAGE
-              then
-                  APP_VERSION="$DEFAULT_IMAGE_TAG"
-              fi
+              APP_VERSION="${IMAGE_TAG_OVERRIDE:-$(git rev-parse --short HEAD)-$BRANCH}"
+
               REPOSITORY_URL="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APP_NAME}"
               APP_IMAGE="${REPOSITORY_URL}:${APP_VERSION}"
 
@@ -154,27 +143,46 @@ spec:
               '''
           }
         }
-        container(name: 'buildah', shell: '/bin/bash') {
-          stage('Build Image') {
-          if (!SKIP_BUILD_STAGE){
-            sh '''#!/bin/bash
-                set -e +x
-                . ./env-config
+        stage('Build Image') {
+          try {
+            container(name: 'buildah', shell: '/bin/bash') {
+                sh '''#!/bin/bash
+              set -e +x
+              . ./env-config
 
-                echo "Building image $APP_IMAGE"
+              if [[ $CR_USERNAME && $CR_PASSWORD ]]
+              then
+                echo "Logging into registry $REGISTRY_URL"
+                buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
+              fi
 
-                buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
+              echo "Attempt to pull existing image"
 
-                if [[ $CR_USERNAME && $CR_PASSWORD ]]
-                then
-                  echo "Logging into registry $REGISTRY_URL"
-                  buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
-                fi
+              buildah pull --tls-verify=false $REPOSITORY_URL:$APP_VERSION
+              '''
+            }
+          }
+          catch (exception) {
+            container(name: 'buildah', shell: '/bin/bash') {
+              sh '''#!/bin/bash
+              set -e +x
+              . ./env-config
 
-                echo "Pushing image to the registry"
-                buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
-                '''
-          }}
+              if [[ $CR_USERNAME && $CR_PASSWORD ]]
+              then
+                echo "Logging into registry $REGISTRY_URL"
+                buildah login -u "$CR_USERNAME" -p "$CR_PASSWORD" "$REGISTRY_URL"
+              fi
+
+              echo "Building image $APP_IMAGE"
+
+              buildah bud --format=docker -f "$DOCKERFILE" -t "$APP_IMAGE" "$CONTEXT"
+
+              echo "Pushing image to the registry"
+              buildah --tls-verify=$TLS_VERIFY push "$APP_IMAGE" "docker://$APP_IMAGE"
+              '''
+            }
+          }    
         }
         container(name: 'ibmcloud', shell: '/bin/bash') {
           stage ("Deploy to dev") {

@@ -4,5 +4,5 @@ metadata:
   name: cr-config
   namespace: jenkins
 data:
-  REGISTRY_URL: us.icr.io
-  REGISTRY_NAMESPACE: samskubetut
+  REGISTRY_URL: docker.io
+  REGISTRY_NAMESPACE: sam0996
