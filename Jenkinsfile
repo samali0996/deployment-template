@@ -22,12 +22,12 @@ def computeAppName(name, branch) {
   return name.toLowerCase().replaceAll("/${branch}", "")
 }
 
-
+def helmChartPath = "deployment/deployment-tools"
 def dockerContext = DOCKER_CONTEXT ? DOCKER_CONTEXT : "."
 def dockerfile = "${DOCKER_CONTEXT}/Dockerfile"
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
-def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? HELM_RELEASE_NAME_OVERRIDE : computeHelmReleaseName(env.JOB_NAME, branch)
+def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? computeHelmReleaseName(HELM_RELEASE_NAME_OVERRIDE, branch) : computeHelmReleaseName(env.JOB_NAME, branch)
 def appName = computeAppName(env.JOB_NAME, branch)
 def timestamp = computeTimestamp(currentBuild)
 
@@ -74,6 +74,8 @@ spec:
       value: ${branch}
     - name: APP_NAME
       value: ${appName}
+    - name: HELM_CHART_PATH
+      value: ${helmChartPath}
     - name: HELM_RELEASE_NAME
       value: ${helmReleaseName}
     - name: IMAGE_TAG_OVERRIDE
@@ -189,7 +191,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade $HELM_RELEASE_NAME deployment/$APP_NAME -f deployment/values_dev.yaml --install --namespace dev --atomic --cleanup-on-fail --timeout 45s \\
+              helm upgrade $HELM_RELEASE_NAME $HELM_CHART_PATH -f deployment/values_dev.yaml --install --namespace dev --atomic --cleanup-on-fail --timeout 45s \\
                 --set image.repository=$REPOSITORY_URL \\
                 --set image.tag=$APP_VERSION \\
                 --set fullnameOverride=$HELM_RELEASE_NAME
