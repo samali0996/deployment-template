@@ -1,14 +1,14 @@
 # Helm chart values override for dev
 
-replicaCount: 2
+replicaCount: 2 
 
 # registry:
 #   imagePullSecretsName: container-registry
 
-# service:
+service:
 #   type: NodePort
-#   targetPort: 5000
-# containerPort: 5000
+  port: 8080
+containerPort: 8080
 
 # healthCheck: false
 
