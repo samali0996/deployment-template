@@ -2,7 +2,7 @@ import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
 DEFAULT_BRANCH = "master"
-IMAGE_TAG_OVERRIDE = ""
+IMAGE_TAG_OVERRIDE = "add50a1-dev"
 DOCKER_CONTEXT = "docker-apps/nodejs/."
 HELM_RELEASE_NAME_OVERRIDE = "nodeapp-1"
 
