@@ -10,6 +10,11 @@ service:
   port: 8080
 containerPort: 8080
 
+livenessProbe:
+  path: /sample
+readinessProbe:
+  path: /sample
+
 # healthCheck: false
 
 # Specified by the command-line (--set image.tag=<version>)
