@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 DEFAULT_BRANCH = "dev"
 IMAGE_TAG_OVERRIDE = "c2129be-dev"
 DOCKER_CONTEXT_OVERRIDE = "docker-apps/springboot/."
-HELM_RELEASE_NAME_OVERRIDE = ""
+HELM_RELEASE_NAME_OVERRIDE = "springboot"
 
 
 def computeTimestamp(RunWrapper build) {
