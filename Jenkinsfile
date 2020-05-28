@@ -3,12 +3,11 @@ import java.text.SimpleDateFormat
 
 //TODO: use configmaps
 // use secrets
-// try taking out the repeat login and see if it still works
-// add override name to image tag?
 DEFAULT_BRANCH = "master"
 IMAGE_TAG_OVERRIDE = "c2129be-dev"
 DOCKER_CONTEXT_OVERRIDE = "docker-apps/springboot/."
 HELM_RELEASE_NAME_OVERRIDE = "springboot"
+HELM_VALUE_FILE_OVERRIDE = "deployment/deployment-overrides/values_springboot.yaml"
 
 
 def computeTimestamp(RunWrapper build) {
@@ -26,6 +25,8 @@ def computeAppName(name, branch) {
 }
 
 def helmChartPath = "deployment/deployment-tools"
+// need to fix this up, since we don't have to specify the default file, helm handles that
+def helmValuePath = HELM_VALUE_FILE_OVERRIDE ? HELM_VALUE_FILE_OVERRIDE : "${helmChartPath}/values.yaml"
 def dockerContext = DOCKER_CONTEXT_OVERRIDE ? DOCKER_CONTEXT_OVERRIDE : "."
 def dockerfile = "${dockerContext}/Dockerfile"
 def branch = env.BRANCH_NAME
@@ -41,6 +42,7 @@ Branch: ${branch}
 Build Number: ${buildNumber}
 Timestamp: ${timestamp}
 Helm Release Name: ${helmReleaseName}
+Helm Values File: ${helmValuePath}
 Image Tag Override: ${IMAGE_TAG_OVERRIDE}
 Docker Context: ${dockerContext}
 """
@@ -79,6 +81,8 @@ spec:
       value: ${helmChartPath}
     - name: HELM_RELEASE_NAME
       value: ${helmReleaseName}
+    - name: HELM_VALUE_FILE
+      value: ${helmValuePath}
     - name: IMAGE_TAG_OVERRIDE
       value: ${IMAGE_TAG_OVERRIDE}
   - name: buildah
@@ -192,7 +196,7 @@ spec:
             sh '''#!/bin/bash
               set -e
               . ./env-config
-              helm upgrade $HELM_RELEASE_NAME $HELM_CHART_PATH -f deployment/values_dev.yaml --install --namespace dev --atomic --cleanup-on-fail --timeout 45s \\
+              helm upgrade $HELM_RELEASE_NAME $HELM_CHART_PATH -f $HELM_VALUE_FILE --install --namespace dev --atomic --cleanup-on-fail --timeout 3m45s \\
                 --set image.repository=$REPOSITORY_URL \\
                 --set image.tag=$APP_VERSION \\
                 --set nameOverride=$HELM_RELEASE_NAME
