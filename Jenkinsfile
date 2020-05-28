@@ -17,9 +17,9 @@ def computeTimestamp(RunWrapper build) {
   return new SimpleDateFormat('yyyyMMdd-HHmmss').format(date)
 }
 
-def computeHelmReleaseName(name, branch) {
+def addBranchSuffix(name, branch) {
   def nameSuffix = branch == DEFAULT_BRANCH ? "" : "-${branch}"
-  return name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
+  return "${name.toLowerCase()}${nameSuffix}"
 }
 
 def computeAppName(name, branch) {
@@ -31,8 +31,8 @@ def dockerContext = DOCKER_CONTEXT_OVERRIDE ? DOCKER_CONTEXT_OVERRIDE : "."
 def dockerfile = "${dockerContext}/Dockerfile"
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
-def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? computeHelmReleaseName("${HELM_RELEASE_NAME_OVERRIDE}-${branch}", branch) : computeHelmReleaseName(env.JOB_NAME, branch)
 def appName = computeAppName(env.JOB_NAME, branch)
+def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? addBranchSuffix("${HELM_RELEASE_NAME_OVERRIDE}", branch) : addBranchSuffix(appName, branch)
 def timestamp = computeTimestamp(currentBuild)
 
 
