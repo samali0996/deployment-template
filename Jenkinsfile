@@ -3,10 +3,9 @@ import java.text.SimpleDateFormat
 
 //TODO: use configmaps
 // use secrets
-// fix helm release name, you need to add the branch instead of remove, when using override
 // try taking out the repeat login and see if it still works
 // add override name to image tag?
-DEFAULT_BRANCH = "dev"
+DEFAULT_BRANCH = "master"
 IMAGE_TAG_OVERRIDE = "c2129be-dev"
 DOCKER_CONTEXT_OVERRIDE = "docker-apps/springboot/."
 HELM_RELEASE_NAME_OVERRIDE = "springboot"
