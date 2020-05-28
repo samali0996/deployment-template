@@ -1,10 +1,13 @@
 import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 import java.text.SimpleDateFormat
 
+//TODO: use configmaps
+// use secrets
+// try taking out the repeat login and see if it still works
+// add override name to image tag?
 DEFAULT_BRANCH = "master"
-IMAGE_TAG_OVERRIDE = ""
+IMAGE_TAG_OVERRIDE = "c2129be-dev"
 DOCKER_CONTEXT_OVERRIDE = "docker-apps/springboot/."
-//TODO: Change to and use as app name override
 HELM_RELEASE_NAME_OVERRIDE = "springboot"
 
 
@@ -13,9 +16,9 @@ def computeTimestamp(RunWrapper build) {
   return new SimpleDateFormat('yyyyMMdd-HHmmss').format(date)
 }
 
-def computeHelmReleaseName(name, branch) {
+def addBranchSuffix(name, branch) {
   def nameSuffix = branch == DEFAULT_BRANCH ? "" : "-${branch}"
-  return name.toLowerCase().replaceAll("/${branch}", "${nameSuffix}")
+  return "${name.toLowerCase()}${nameSuffix}"
 }
 
 def computeAppName(name, branch) {
@@ -27,8 +30,8 @@ def dockerContext = DOCKER_CONTEXT_OVERRIDE ? DOCKER_CONTEXT_OVERRIDE : "."
 def dockerfile = "${dockerContext}/Dockerfile"
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
-def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? computeHelmReleaseName(HELM_RELEASE_NAME_OVERRIDE, branch) : computeHelmReleaseName(env.JOB_NAME, branch)
 def appName = computeAppName(env.JOB_NAME, branch)
+def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? addBranchSuffix("${HELM_RELEASE_NAME_OVERRIDE}", branch) : addBranchSuffix(appName, branch)
 def timestamp = computeTimestamp(currentBuild)
 
 
