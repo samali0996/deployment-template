@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 // use secrets
 // fix helm release name, you need to add the branch instead of remove, when using override
 // try taking out the repeat login and see if it still works
+// add override name to image tag?
 DEFAULT_BRANCH = "master"
 IMAGE_TAG_OVERRIDE = "c2129be-dev"
 DOCKER_CONTEXT_OVERRIDE = "docker-apps/springboot/."
@@ -30,7 +31,7 @@ def dockerContext = DOCKER_CONTEXT_OVERRIDE ? DOCKER_CONTEXT_OVERRIDE : "."
 def dockerfile = "${dockerContext}/Dockerfile"
 def branch = env.BRANCH_NAME
 def buildNumber = env.BUILD_NUMBER
-def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? computeHelmReleaseName(HELM_RELEASE_NAME_OVERRIDE, branch) : computeHelmReleaseName(env.JOB_NAME, branch)
+def helmReleaseName = HELM_RELEASE_NAME_OVERRIDE ? computeHelmReleaseName("${HELM_RELEASE_NAME_OVERRIDE}-${branch}", branch) : computeHelmReleaseName(env.JOB_NAME, branch)
 def appName = computeAppName(env.JOB_NAME, branch)
 def timestamp = computeTimestamp(currentBuild)
 
