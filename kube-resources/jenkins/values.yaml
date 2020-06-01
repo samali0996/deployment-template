@@ -15,6 +15,7 @@ master:
     - workflow-aggregator:latest
     - credentials-binding:latest
     - git:latest
+    # - gitlab:latest
   resources:
     requests:
       cpu: "50m"
