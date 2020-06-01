@@ -43,7 +43,7 @@ volumes:
 
 # secrets to be injected into the environment
 secrets:
-  - SecretRef:
+  - secretRef:
       name: springboot-secrets
 
 # configMaps: {}
