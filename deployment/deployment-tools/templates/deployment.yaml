@@ -39,6 +39,8 @@ spec:
               path: {{ .Values.readinessProbe.path }}
               port: http
           {{- end }}
+          envFrom:
+            {{- to Yaml . .Values.secrets | nindent 12}}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.volumeMounts }}

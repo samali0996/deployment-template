@@ -41,6 +41,11 @@ volumes:
     configMap:
       name: server-config
 
+# secrets to be injected into the environment
+secrets:
+  - SecretRef:
+      name: springboot-secrets
+
 # configMaps: {}
 configMaps:
   server-config:
@@ -52,6 +57,7 @@ configMaps:
         foo2: bar2
       extra.conf: |- 
         hello: world
+
         
 nodeSelector: {}
 
