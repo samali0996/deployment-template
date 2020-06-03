@@ -68,7 +68,7 @@ spec:
         stage('Maven build') {
           // buildInfo = rtMaven.run pom: 'maven-example/pom.xml', goals: 'clean install'
           sh"""
-            ls /home/jenkins
+            ls /home/jenkins/maven
             mvn --version
           """
         }
