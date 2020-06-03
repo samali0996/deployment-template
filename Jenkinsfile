@@ -25,11 +25,11 @@ spec:
         // // Create an Artifactory Maven instance.
         // def rtMaven = Artifactory.newMavenBuild()
         // def buildInfo
-        println"""
-        URL: ${env.ARTIFACTORY_URL}
-        """
 
         stage('Clone') {
+            println"""
+            URL: ${env.ARTIFACTORY_URL}
+            """
             checkout scm
         }
     }
