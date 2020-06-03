@@ -72,7 +72,7 @@ spec:
         }
 
         stage('Publish build info') {
-          // server.publishBuildInfo buildInfo
+          server.publishBuildInfo buildInfo
         }
     }
 }
