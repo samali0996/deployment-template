@@ -56,20 +56,17 @@ spec:
           // Tool name from Jenkins configuration
           // rtMaven.tool = "Maven-3.3.9"
           env.MAVEN_HOME = '/home/jenkins/maven'
-          // env.PATH = '${env.MAVEN_HOME}/bin:${env.PATH}'
+          env.PATH = '${env.MAVEN_HOME}/bin:${env.PATH}'
           // Set Artifactory repositories for dependencies resolution and artifacts deployment.
           rtMaven.deployer releaseRepo:'libs-release-local', snapshotRepo:'libs-snapshot-local', server: server
           rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
-          sh"""
-            export PATH=/home/jenkins/maven/bin:$PATH
-          """
         }
 
         stage('Maven build') {
           // buildInfo = rtMaven.run pom: 'maven-example/pom.xml', goals: 'clean install'
           sh"""
-            ls /home/jenkins/maven
-            /home/jenkins/maven/bin/mvn --version
+            echo $PATH
+            mvn --version
           """
         }
 
