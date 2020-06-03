@@ -56,6 +56,7 @@ spec:
           // Tool name from Jenkins configuration
           // rtMaven.tool = "Maven-3.3.9"
           env.MAVEN_HOME = '/home/jenkins/maven'
+          print "${env.PATH}"
           // Set Artifactory repositories for dependencies resolution and artifacts deployment.
           rtMaven.deployer releaseRepo:'libs-release-local', snapshotRepo:'libs-snapshot-local', server: server
           rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
