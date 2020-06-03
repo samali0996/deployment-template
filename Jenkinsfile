@@ -33,13 +33,11 @@ spec:
     emptyDir: {}
 """) {
     node(POD_LABEL) {
-      container('jnlp'){
-          // create Artifactory server instance
-          def server = Artifactory.newServer url: env.ARTIFACTORY_URL, username: env.ARTIFACTORY_USERNAME, password: env.ARTIFACTORY_PASSWORD
-          // Create an Artifactory Maven instance.
-          def rtMaven = Artifactory.newMavenBuild()
-          def buildInfo
-        }
+        // create Artifactory server instance
+        def server = Artifactory.newServer url: env.ARTIFACTORY_URL, username: env.ARTIFACTORY_USERNAME, password: env.ARTIFACTORY_PASSWORD
+        // Create an Artifactory Maven instance.
+        def rtMaven = Artifactory.newMavenBuild()
+        def buildInfo
 
         stage('Clone') {
           checkout scm
