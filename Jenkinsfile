@@ -35,8 +35,8 @@ spec:
           // // Create an Artifactory Maven instance.
           // def rtMaven = Artifactory.newMavenBuild()
           // def buildInfo
-          sh"""
-           env
+          println """
+           ${env.ARTIFACTORY_URL}
           """
         }
 
