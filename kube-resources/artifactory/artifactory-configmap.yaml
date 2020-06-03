@@ -4,4 +4,4 @@ metadata:
   name: artifactory-config
   namespace: jenkins
 data:
-  url: artifactory-artifactory:8081
+  url: http://artifactory-artifactory:8081/artifactory/
