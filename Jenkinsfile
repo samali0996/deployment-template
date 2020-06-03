@@ -5,7 +5,7 @@ spec:
     env:
     - name: ARTIFACTORY_URL
       valueFrom:
-        configMapRef:
+        configMapKeyRef:
           name: artifactory-config
           key: url
     - name: ARTIFACTORY_USERNAME
