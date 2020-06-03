@@ -2,6 +2,11 @@ podTemplate(yaml:"""
 spec:
   containers:
   - name: maven
+    tty: true
+    command: ["/bin/bash"]
+    volumeMounts:
+    - name: home-volume
+      mountPath: /home/jenkins
     image: maven:3.6.3-jdk-8
     env:
     - name: ARTIFACTORY_URL
