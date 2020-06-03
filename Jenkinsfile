@@ -57,12 +57,13 @@ spec:
         stage('Maven build') {
           // buildInfo = rtMaven.run pom: 'maven-example/pom.xml', goals: 'clean install'
           sh"""
-           which mvn
+            env
+            mvn
           """
         }
 
         stage('Publish build info') {
-          server.publishBuildInfo buildInfo
+          // server.publishBuildInfo buildInfo
         }
     }
 }
