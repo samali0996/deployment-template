@@ -67,10 +67,10 @@ spec:
 
         stage('Maven build') {
           sh"""
+            . ./env-config
             cd maven-example
             mvn clean install
           """
-          
           // buildInfo = rtMaven.run pom: 'maven-example/pom.xml', goals: 'clean install'
         }
 
