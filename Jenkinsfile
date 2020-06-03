@@ -60,7 +60,7 @@ spec:
         stage('Maven build') {
           // buildInfo = rtMaven.run pom: 'maven-example/pom.xml', goals: 'clean install'
           sh"""
-            ls /usr/share/maven/
+            ls /usr/share/
             /usr/share/maven/bin/mvn --version
           """
         }
