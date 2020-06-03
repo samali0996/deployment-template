@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: artifactory-config
+  namespace: jenkins
+data:
+  url: artifactory-artifactory:8081
