@@ -1,6 +1,23 @@
 podTemplate(yaml:"""
 spec:
   containers:
+  - name: jnlp
+    env:
+    - name: ARTIFACTORY_URL
+      valueFrom:
+        configMapKeyRef:
+          name: artifactory-config
+          key: url
+    - name: ARTIFACTORY_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: artifactory-credentials
+          key: username
+    - name: ARTIFACTORY_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: artifactory-credentials
+          key: password
   - name: maven
     tty: true
     command: ["/bin/bash"]
@@ -29,7 +46,7 @@ spec:
     emptyDir: {}
 """) {
     node(POD_LABEL) {
-      container('maven'){
+      container('jnlp'){
         // create Artifactory server instance
         def server = Artifactory.newServer url: env.ARTIFACTORY_URL, username: env.ARTIFACTORY_USERNAME, password: env.ARTIFACTORY_PASSWORD
         // Create an Artifactory Maven instance.
