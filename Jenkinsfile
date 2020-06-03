@@ -27,10 +27,9 @@ spec:
         // def buildInfo
 
         stage('Clone') {
-            println"""
-            URL: ${env.getEnvironment()}
-            """
-            checkout scm
+            sh'''
+              env
+            '''
         }
     }
 }
