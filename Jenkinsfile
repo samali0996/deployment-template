@@ -30,7 +30,7 @@ spec:
 """) {
     node(POD_LABEL) {
         // create Artifactory server instance
-        def server = Artifactory.newServer id: 'Artifactory', url: env.ARTIFACTORY_URL, username: env.ARTIFACTORY_USERNAME, password: env.ARTIFACTORY_PASSWORD
+        def server = Artifactory.newServer url: env.ARTIFACTORY_URL, username: env.ARTIFACTORY_USERNAME, password: env.ARTIFACTORY_PASSWORD
         // Create an Artifactory Maven instance.
         def rtMaven = Artifactory.newMavenBuild()
         def buildInfo
