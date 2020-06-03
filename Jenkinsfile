@@ -20,14 +20,20 @@ spec:
           key: password
 """) {
     node(POD_LABEL) {
-        // Get Artifactory server instance, defined in the Artifactory Plugin administration page.
+        // create Artifactory server instance
         def server = Artifactory.newServer url: env.ARTIFACTORY_URL, username: env.ARTIFACTORY_USERNAME, password: env.ARTIFACTORY_PASSWORD
         // Create an Artifactory Maven instance.
         def rtMaven = Artifactory.newMavenBuild()
         def buildInfo
 
+        println"""
+        ${server}
+        """
+
         stage('Clone') {
           checkout scm
         }
+
+        stage('Artifactory configuration')
     }
 }
