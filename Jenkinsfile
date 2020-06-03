@@ -3,8 +3,8 @@ spec:
   containers:
   - name: jnlp
     volumeMounts:
-    - name: home-volume
-      mountPath: /home/jenkins
+    - name: shared-volume
+      mountPath: /usr/share/maven
     env:
     - name: ARTIFACTORY_URL
       valueFrom:
@@ -25,12 +25,13 @@ spec:
     tty: true
     command: ["/bin/bash"]
     volumeMounts:
-    - name: home-volume
-      mountPath: /home/jenkins
+    - name: shared-volume
+      mountPath: /usr/share/maven
     image: maven:3.6.3-jdk-8
   volumes:
-  - name: home-volume
+  - name: shared-volume
     emptyDir: {}
+  
 """) {
     node(POD_LABEL) {
         // create Artifactory server instance
