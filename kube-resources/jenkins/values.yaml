@@ -6,7 +6,7 @@ master:
     - hosts:
       - jenkins.<hostname>
       secretName: <ingress_secret>
-    enabled: true
+    enabled: false
     hostName: jenkins.<hostname>
   installPlugins:
     - kubernetes:latest
@@ -15,7 +15,7 @@ master:
     - workflow-aggregator:latest
     - credentials-binding:latest
     - git:latest
-    # - gitlab:latest
+    - artifactory:latest
   resources:
     requests:
       cpu: "50m"
@@ -23,8 +23,8 @@ master:
     limits:
       cpu: "1"
       memory: "512Mi"
-  slaveKubernetesNamespace: deploy-tools
+  slaveKubernetesNamespace: jenkins
 persistence:
   enabled: false
   # existingClaim: jenkins-pv-claim
-namespaceOverride: deploy-tools
+namespaceOverride: jenkins

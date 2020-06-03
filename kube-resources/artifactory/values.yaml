@@ -1,0 +1,35 @@
+
+artifactory:
+  artifactory:
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+    javaOpts:
+      xms: "1g"
+      xmx: "4g"
+    
+    persistence:
+      enabled: false
+
+  postgresql:
+    enabled: false
+    persistence:
+      enabled: false
+  
+  nginx: 
+    enabled: false
+      
+  ingress:
+    enabled: false
+    hosts:
+      - "artifactory.<hostname>"
+    annotations:
+      ingress.bluemix.net/redirect-to-https: "True"  
+    tls:
+      - secretName: <ingress_secret>
+        hosts:
+          - artifactory.<hostname>
