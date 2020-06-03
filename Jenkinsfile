@@ -3,8 +3,8 @@ spec:
   containers:
   - name: jnlp
     volumeMounts:
-    - name: shared-volume
-      mountPath: /usr/share/maven
+    - name: home-dir
+      mountPath: /home/jenkins
     env:
     - name: ARTIFACTORY_URL
       valueFrom:
@@ -25,11 +25,11 @@ spec:
     tty: true
     command: ["/bin/bash"]
     volumeMounts:
-    - name: shared-volume
-      mountPath: /usr/share/maven
+    - name: home-dir
+      mountPath: /home/jenkins
     image: maven:3.6.3-jdk-8
   volumes:
-  - name: shared-volume
+  - name: home-dir
     emptyDir: {}
   
 """) {
@@ -44,24 +44,32 @@ spec:
           checkout scm
         }
 
+        container("maven") {
+          stage('Set up maven') {
+            sh"""
+              cp -r /usr/share/maven /home/jenkins
+            """
+          }
+        }
+
         stage('Artifactory configuration') {
           // Tool name from Jenkins configuration
           // rtMaven.tool = "Maven-3.3.9"
-          env.MAVEN_HOME = '/usr/share/maven'
+          env.MAVEN_HOME = '/home/jenkins/maven'
           // env.PATH = '${env.MAVEN_HOME}/bin:${env.PATH}'
           // Set Artifactory repositories for dependencies resolution and artifacts deployment.
           rtMaven.deployer releaseRepo:'libs-release-local', snapshotRepo:'libs-snapshot-local', server: server
           rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
           sh"""
-            export PATH=/usr/share/maven/bin:$PATH
+            export PATH=/home/jenkins/maven/bin:$PATH
           """
         }
 
         stage('Maven build') {
           // buildInfo = rtMaven.run pom: 'maven-example/pom.xml', goals: 'clean install'
           sh"""
-            ls /usr/share/
-            /usr/share/maven/bin/mvn --version
+            ls /home/jenkins
+            mvn --version
           """
         }
 
