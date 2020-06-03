@@ -58,7 +58,6 @@ spec:
           // buildInfo = rtMaven.run pom: 'maven-example/pom.xml', goals: 'clean install'
           sh"""
             env
-            mvn
           """
         }
 
