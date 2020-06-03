@@ -28,7 +28,7 @@ spec:
 
         stage('Clone') {
             println"""
-            URL: ${env.ARTIFACTORY_URL}
+            URL: ${env.getEnvironment()}
             """
             checkout scm
         }
