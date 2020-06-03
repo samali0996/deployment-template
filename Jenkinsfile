@@ -24,6 +24,9 @@ spec:
         secretKeyRef:
           name: artifactory-credentials
           key: password
+  volumes:
+  - name: home-volume
+    emptyDir: {}
 """) {
     node(POD_LABEL) {
         // create Artifactory server instance
