@@ -27,7 +27,7 @@ spec:
         def buildInfo
 
         println"""
-        ${server}
+        ${server.toString()}
         """
 
         stage('Clone') {
