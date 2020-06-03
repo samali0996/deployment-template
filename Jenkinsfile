@@ -2,22 +2,22 @@ podTemplate(yaml:"""
 spec:
   containers:
   - name: jnlp
-  env:
-  - name: ARTIFACTORY_URL
-    valueFrom:
-      configMapRef:
-        name: artifactory-config
-        key: url
-  - name: ARTIFACTORY_USERNAME
-    valueFrom:
-      secretKeyRef:
-        name: artifactory-credentials
-        key: username
-  - name: ARTIFACTORY_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: artifactory-credentials
-        key: password
+    env:
+    - name: ARTIFACTORY_URL
+      valueFrom:
+        configMapRef:
+          name: artifactory-config
+          key: url
+    - name: ARTIFACTORY_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: artifactory-credentials
+          key: username
+    - name: ARTIFACTORY_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: artifactory-credentials
+          key: password
 """) {
     node(POD_LABEL) {
         // // Get Artifactory server instance, defined in the Artifactory Plugin administration page.
