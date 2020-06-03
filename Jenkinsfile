@@ -29,7 +29,7 @@ spec:
     emptyDir: {}
 """) {
     node(POD_LABEL) {
-      container(maven){
+      container('maven'){
         // create Artifactory server instance
         def server = Artifactory.newServer url: env.ARTIFACTORY_URL, username: env.ARTIFACTORY_USERNAME, password: env.ARTIFACTORY_PASSWORD
         // Create an Artifactory Maven instance.
