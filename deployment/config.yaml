@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sample
+  namespace: dev
+data:
+  application.yaml: |-
+    foobar:
+      foo: bar
+      foo2: bar2
+    server:
+      port: 8080

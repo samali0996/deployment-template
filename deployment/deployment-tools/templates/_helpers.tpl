@@ -7,7 +7,6 @@ Expand the name of the chart.
 {{- end -}}
 
 {{- define "deployment-tools.volumes" -}}
-volumes:
 {{- range .Values.volumes -}}
 {{- range $index, $element := . -}}
 {{- if eq $index "configMap" }}
