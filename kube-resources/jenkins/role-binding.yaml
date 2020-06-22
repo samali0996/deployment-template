@@ -1,11 +1,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: default
-  namespace: dev
+  name: jenkins
+  namespace: deploy-tools
 subjects:
 - kind: ServiceAccount
-  name: default # "name" is case sensitive
+  name: jenkins # "name" is case sensitive
   namespace: deploy-tools
 roleRef:
   kind: Role #this must be Role or ClusterRole

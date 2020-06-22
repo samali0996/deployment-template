@@ -1,9 +1,9 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  namespace: dev
+  namespace: deploy-tools
   name: deploy-permissions
 rules:
-- apiGroups: ["", "batch", "extensions", "apps"] # "" indicates the core API group
+- apiGroups: ["", "batch", "extensions", "apps", "networking.k8s.io"] # "" indicates the core API group
   resources: ["*"]
   verbs: ["*"]
